@@ -1,0 +1,54 @@
+cmake_minimum_required(VERSION 3.20)
+make_directory(build/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build/bin)
+set(CMAKE_CXX_STANDARD 23)
+
+#-------------------------------------------
+add_subdirectory(vendor/GLFW)
+add_subdirectory(vendor/imgui)
+#-------------------------------------------
+project(MyProject VERSION 1.0 LANGUAGES C CXX)
+find_package(OpenGL REQUIRED)
+
+add_library(StratEngine 
+    STATIC
+        StratEngine/src/Core.cpp
+        StratEngine/src/WinWindow/GlfwWindow.cpp
+        StratEngine/src/Application.cpp
+        StratEngine/src/ImGui/UI_imgui.cpp
+        # GLAD files
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/glad/glad.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/src/glad.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/KHR/khrplatform.h
+        )
+
+target_link_libraries(StratEngine 
+    PUBLIC 
+        glfw
+        OpenGL::GL
+        imgui
+        )
+
+target_include_directories(StratEngine 
+    PUBLIC 
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLFW/include/GLFW
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/
+        )
+
+target_precompile_headers(StratEngine 
+    INTERFACE 
+    StratEngine/src/pchstrat.h
+    )
+
+#-------------------------------------------
+
+add_executable(MyApp UserApplication/UserApplication.cpp)
+
+target_link_libraries(MyApp PRIVATE StratEngine)
+
+target_include_directories(MyApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine)
+
