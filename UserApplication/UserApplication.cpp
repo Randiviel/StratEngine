@@ -1,10 +1,6 @@
 #include "StratEngine.h"
 
 
-int main() {
-    StratEngine::Application app;
-
-    app.Run();
-
-    return 0;
-}
+StratEngine::Application* StratEngine::CreateApplication(){
+    return new StratEngine::Application;  
+};

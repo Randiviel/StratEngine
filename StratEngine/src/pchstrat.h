@@ -1,5 +1,3 @@
-
-
 #include <memory>
 #include <string>
 #include <iostream>
@@ -7,14 +5,15 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Application.h"
+#include "glad/glad.h"
+#include "glfw3.h"
+
 #include "Event/EventDispatcher.h"
 #include "Event/KeyboardEvent.h"
 #include "Event/KeyCodes.h"
 #include "Event/Event.h"
 #include "Event/MouseEvent.h"
-#include "glad/glad.h"
-#include "glfw3.h"
-#include "WinWindow/GlfwWindow.h"
-#include "ImGui/UI_imgui.h"
-#include "StratConfig.h"
+
+#include "Window/Window.h"
+#include "Window/WindowsWindow/WindowsWindow.h"
+#include "Core/Application.h"

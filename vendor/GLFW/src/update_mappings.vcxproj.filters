@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\yiss\Desktop\Development\StratEngine\CMakeFiles\808f5480ba2147357cfd817ece91a0c1\update_mappings.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Users\yiss\Desktop\Development\StratEngine\vendor\GLFW\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\yiss\Desktop\Development\StratEngine\vendor\GLFW\src\mappings.h.in">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="C:\Users\yiss\Desktop\Development\StratEngine\vendor\GLFW\CMake\GenerateMappings.cmake" />
+    <None Include="C:\Users\yiss\Desktop\Development\StratEngine\vendor\GLFW\src\CMakeFiles\update_mappings" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{721B21B8-793A-3236-B7E9-8FCF77FE6438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{61D1A8DB-8867-3385-8FE3-F98CDD962BB6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

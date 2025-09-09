@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+C:/Software/cmake-4.1.0-windows-x86_64/share/cmake-4.1/Modules/FindDoxygen.cmake
+C:/Software/cmake-4.1.0-windows-x86_64/share/cmake-4.1/Modules/FindPackageHandleStandardArgs.cmake
+C:/Software/cmake-4.1.0-windows-x86_64/share/cmake-4.1/Modules/FindPackageMessage.cmake
+C:/Users/yiss/Desktop/Development/StratEngine/vendor/GLFW/docs/CMakeLists.txt

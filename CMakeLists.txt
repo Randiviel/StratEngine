@@ -9,16 +9,28 @@ add_subdirectory(vendor/imgui)
 #-------------------------------------------
 project(MyProject VERSION 1.0 LANGUAGES C CXX)
 find_package(OpenGL REQUIRED)
+#-------------------------------------------
+add_library(Glad_lib
+    STATIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/src/glad.c
+    )
 
+target_include_directories(Glad_lib
+    PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/
+    )
+#-------------------------------------------
 add_library(StratEngine 
     STATIC
-        StratEngine/src/Core.cpp
-        StratEngine/src/WinWindow/GlfwWindow.cpp
-        StratEngine/src/Application.cpp
-        StratEngine/src/ImGui/UI_imgui.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/Window.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/WindowsWindow/WindowsWindow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/WindowsWindow/WindowsWindow.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Core/Application.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Core/Application.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/StratConfig.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Core/Entrypoint.h
         # GLAD files
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/glad/glad.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/src/glad.c
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/KHR/khrplatform.h
         )
 
@@ -27,6 +39,7 @@ target_link_libraries(StratEngine
         glfw
         OpenGL::GL
         imgui
+        Glad_lib
         )
 
 target_include_directories(StratEngine 
@@ -40,10 +53,9 @@ target_include_directories(StratEngine
         )
 
 target_precompile_headers(StratEngine 
-    INTERFACE 
+    PRIVATE
     StratEngine/src/pchstrat.h
     )
-
 #-------------------------------------------
 
 add_executable(MyApp UserApplication/UserApplication.cpp)
