@@ -41,31 +41,21 @@ namespace StratEngine {
     {
     }
 
-    void WindowsWindow::GetWindowHandle()
+    GLFWwindow* WindowsWindow::GetWindowHandle()
     {
+        return m_WindowHandle;
     }
 
     void WindowsWindow::OnEvent(Event &event)
     {
     }
 
-    void WindowsWindow::Run(){
-        while (!glfwWindowShouldClose(m_WindowHandle))
-        {
-            
-
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-
-
-            glfwSwapBuffers(m_WindowHandle);
-            glfwPollEvents();
-        }
-    }
-
     void WindowsWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
+
         window = glfwGetCurrentContext();
+        
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) 
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+
     }
 }

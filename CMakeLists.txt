@@ -58,7 +58,7 @@ target_precompile_headers(StratEngine
     )
 #-------------------------------------------
 
-add_executable(MyApp UserApplication/UserApplication.cpp)
+add_executable(MyApp Sandbox/Sandbox.cpp)
 
 target_link_libraries(MyApp PRIVATE StratEngine)
 
