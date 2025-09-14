@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window/Window.h"
+#include <functional>
 
 struct GLFWwindow;
 
@@ -13,12 +14,13 @@ namespace StratEngine {
 
         virtual void SetWindowSize() override;
         virtual void GetWindowSize() override;
-        virtual void OnEvent(Event& event) override;
+        void SetEventCallback(std::function<void(Event& e)> callback);
 
         GLFWwindow* GetWindowHandle();
         
         private:
         static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        std::function<void(Event& e)> m_EventCallback;
         GLFWwindow* m_WindowHandle;
 
     };

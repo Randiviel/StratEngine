@@ -17,8 +17,10 @@ namespace StratEngine {
             exit(EXIT_FAILURE);
         }
 
-        glfwSetKeyCallback(m_WindowHandle, key_callback);
         glfwMakeContextCurrent(m_WindowHandle);
+        glfwSetWindowUserPointer(m_WindowHandle, this);
+        glfwSetKeyCallback(m_WindowHandle, key_callback);
+
         glfwSwapInterval(1);
 
             if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -41,21 +43,27 @@ namespace StratEngine {
     {
     }
 
+    void WindowsWindow::SetEventCallback(std::function<void(Event& e)> callback)
+    {
+        m_EventCallback = callback;
+    }
+
     GLFWwindow* WindowsWindow::GetWindowHandle()
     {
         return m_WindowHandle;
     }
 
-    void WindowsWindow::OnEvent(Event &event)
-    {
-    }
-
     void WindowsWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 
-        window = glfwGetCurrentContext();
+        WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
         
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) 
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+        if ((action == GLFW_PRESS || action == GLFW_REPEAT) && windowInstance->m_EventCallback) {
+        KeyPressedEvent event(key);
+        windowInstance->m_EventCallback(event);
+        }
 
     }
 }

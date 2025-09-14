@@ -8,8 +8,11 @@ namespace StratEngine {
         public:
             Application();
             ~Application();
-            inline WindowsWindow* GetWindow() { return m_Window.get(); } ;
+
             void Run();
+            void OnEvent(Event& e);
+            inline WindowsWindow* GetWindow() { return m_Window.get(); } ;
+
         private:
             std::unique_ptr<WindowsWindow> m_Window;
 

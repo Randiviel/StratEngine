@@ -5,7 +5,7 @@
 namespace StratEngine {
     class KeyPressedEvent : public Event {
     public:
-        KeyPressedEvent(const char key) : m_Key(key) {}
+        KeyPressedEvent(int key) : m_Key(key) {}
         virtual ~KeyPressedEvent() = default;
         int GetKey() const { return m_Key; }
 

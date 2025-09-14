@@ -4,6 +4,7 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include <functional>
 
 #include "glad/glad.h"
 #include "glfw3.h"

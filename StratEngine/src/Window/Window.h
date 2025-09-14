@@ -15,7 +15,6 @@ namespace StratEngine{
             virtual ~Window() = default;
             virtual void SetWindowSize() = 0;
             virtual void GetWindowSize() = 0;
-            virtual void OnEvent(Event& event) = 0;
         private:
     };
 }
