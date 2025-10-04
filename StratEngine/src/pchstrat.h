@@ -4,7 +4,9 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
-#include <functional>
+#include <tuple>
+#include <fstream>
+#include <sstream>
 
 #include "glad/glad.h"
 #include "glfw3.h"
@@ -18,3 +20,8 @@
 #include "Window/Window.h"
 #include "Window/WindowsWindow/WindowsWindow.h"
 #include "Core/Application.h"
+#include "Core/Layer.h"
+
+#include "Renderer/Shader.h"
+#include "Renderer/OpenGLBuffer.h"
+#include "Renderer/VertexArray.h"

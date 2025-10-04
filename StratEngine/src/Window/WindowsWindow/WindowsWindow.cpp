@@ -20,6 +20,9 @@ namespace StratEngine {
         glfwMakeContextCurrent(m_WindowHandle);
         glfwSetWindowUserPointer(m_WindowHandle, this);
         glfwSetKeyCallback(m_WindowHandle, key_callback);
+        glfwSetCursorPosCallback(m_WindowHandle, mousepos_callback);
+        glfwSetMouseButtonCallback(m_WindowHandle, mousebutton_callback);
+        glfwSetWindowSizeCallback(m_WindowHandle, window_size_callback);
 
         glfwSwapInterval(1);
 
@@ -53,8 +56,8 @@ namespace StratEngine {
         return m_WindowHandle;
     }
 
-    void WindowsWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
-
+    void WindowsWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
         WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
         
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) 
@@ -65,5 +68,31 @@ namespace StratEngine {
         windowInstance->m_EventCallback(event);
         }
 
+    }
+
+    void WindowsWindow::mousepos_callback(GLFWwindow *window, double xpos, double ypos)
+    {
+        WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
+        MouseMovedEvent event(xpos, ypos);
+        windowInstance->m_EventCallback(event);
+    }
+    void WindowsWindow::mousebutton_callback(GLFWwindow *window, int button, int action, int mods)
+    {
+        switch(action){
+            case GLFW_PRESS: {
+                WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
+                MousePressedEvent event(button);
+                windowInstance->m_EventCallback(event);
+                break;
+            }
+            case GLFW_RELEASE: {
+                break;
+            }
+        }
+    }
+    void WindowsWindow::window_size_callback(GLFWwindow *window, int width, int height)
+    {
+        WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
+        
     }
 }

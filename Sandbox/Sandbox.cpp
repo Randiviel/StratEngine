@@ -1,5 +1,6 @@
 #include "StratEngine.h"
 
 StratEngine::Application* StratEngine::CreateApplication(){
-    return new StratEngine::Application;  
-};
+    Application* app = new Application();
+    return app;
+}
