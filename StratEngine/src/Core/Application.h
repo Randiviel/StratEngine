@@ -2,6 +2,7 @@
 #include <memory>
 #include "Window/WindowsWindow/WindowsWindow.h"
 #include "Layer.h"
+#include "Renderer/Camera.h"
 
 namespace StratEngine {
 
@@ -23,6 +24,8 @@ namespace StratEngine {
             std::unique_ptr<WindowsWindow> m_Window;
             LayerStack m_LayerStack;
             RenderAPI m_RenderAPI = RenderAPI::OpenGL;
+            Camera m_Camera;
+            float m_DeltaTime;
         private:
             bool isRunning();
     };

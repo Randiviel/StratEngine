@@ -1,4 +1,5 @@
 #include "pchstrat.h"
+#include "VertexArray.h"
 
 namespace StratEngine
 {
@@ -26,12 +27,31 @@ namespace StratEngine
     {
         this->Bind();
         vertexBuffer.Bind();
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-        
-        glEnableVertexAttribArray(0);
+        int attribCount{0};
+        int attribOffset{0};
+
+        for(const auto i : m_ShaderAttributes)
+        {
+            unsigned int stride{0};
+            for(const auto i : m_ShaderAttributes)
+            {
+                stride+= i.Count;
+            }
+            stride = stride * sizeof(float);
+            glVertexAttribPointer(attribCount, i.Count, i.GetGLenumType(i.Type), i.Normalized, stride, reinterpret_cast<const void*>(attribOffset));
+            glEnableVertexAttribArray(attribCount);
+            attribCount++;
+            attribOffset+=i.Count * sizeof(float);
+        }
 
         glBindVertexArray(0); 
         glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     }
+
+    void VertexArray::BindShaderAttrib(const std::vector<ShaderAttributes>& attributes)
+    {
+        m_ShaderAttributes = attributes;
+    }
 }
+

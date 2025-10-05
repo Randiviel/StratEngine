@@ -8,7 +8,7 @@ namespace StratEngine {
     public:
         MouseMovedEvent(double xpos, double ypos) : m_x{xpos}, m_y{ypos} {}
         virtual ~MouseMovedEvent() = default;
-        inline std::tuple<double, double> GetMousePos() { return std::make_tuple(m_x, m_y); };
+        inline std::pair<double, double> GetMousePos() { return std::make_pair(m_x, m_y); };
         EVENT_CLASS_TYPE(MouseMoved)
         EVENT_CLASS_CATEGORY(EventCategory::MouseEvent | EventCategory::InputEvent)
 

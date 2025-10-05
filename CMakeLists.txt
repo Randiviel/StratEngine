@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 #-------------------------------------------
 add_subdirectory(vendor/GLFW)
 add_subdirectory(vendor/imgui)
+add_subdirectory(vendor/glm)
 #-------------------------------------------
 project(MyProject VERSION 1.0 LANGUAGES C CXX)
 find_package(OpenGL REQUIRED)
@@ -40,6 +41,7 @@ target_link_libraries(StratEngine
         OpenGL::GL
         imgui
         Glad_lib
+        glm
         )
 
 target_include_directories(StratEngine 
@@ -50,6 +52,7 @@ target_include_directories(StratEngine
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/GLAD/include/
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor
         )
 
 target_precompile_headers(StratEngine 

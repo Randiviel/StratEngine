@@ -35,7 +35,7 @@ namespace StratEngine
         if(!checkCompileErrors(vertexShader, "VERTEX"))
         {
             glDeleteShader(vertexShader);
-            m_ShaderID = 0; // Oznacz jako invalid
+            m_ShaderID = 0; 
             return;
         }
 
@@ -46,7 +46,7 @@ namespace StratEngine
         {
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
-            m_ShaderID = 0; // Oznacz jako invalid
+            m_ShaderID = 0; 
             return;
         }
 
@@ -59,7 +59,7 @@ namespace StratEngine
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
             glDeleteProgram(m_ShaderID);
-            m_ShaderID = 0; // Oznacz jako invalid
+            m_ShaderID = 0;
             return;
         }
 

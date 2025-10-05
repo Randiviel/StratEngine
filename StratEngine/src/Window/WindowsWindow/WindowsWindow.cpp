@@ -23,7 +23,7 @@ namespace StratEngine {
         glfwSetCursorPosCallback(m_WindowHandle, mousepos_callback);
         glfwSetMouseButtonCallback(m_WindowHandle, mousebutton_callback);
         glfwSetWindowSizeCallback(m_WindowHandle, window_size_callback);
-
+        glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSwapInterval(1);
 
             if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
