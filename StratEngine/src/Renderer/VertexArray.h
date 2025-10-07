@@ -1,5 +1,4 @@
 #pragma once
-#include "Renderer/OpenGLBuffer.h"
 #include "Shader.h"
 
 namespace StratEngine {
@@ -7,16 +6,12 @@ namespace StratEngine {
     class VertexArray 
     {
         public:
-            VertexArray();
-            ~VertexArray();
+            VertexArray() = default;
+            ~VertexArray() = default;
 
-            void Bind() const;
-            void Unbind() const; 
-            void AddBuffer(VertexBuffer& vertexBuffer);
-            void BindShaderAttrib(const std::vector<ShaderAttributes>& attributes);
-
-        private:
-            unsigned int m_VertexArrayID;
-            std::vector<ShaderAttributes> m_ShaderAttributes;
+            virtual void Bind() const {};
+            virtual void Unbind() const {}; 
+            virtual void AddBuffer(VertexBuffer& vertexBuffer) {};
+            virtual void BindShaderAttrib(const std::vector<ShaderAttributes>& attributes) {};
     };
 }

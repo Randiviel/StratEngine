@@ -1,29 +1,28 @@
 #include "pchstrat.h"
-#include "VertexArray.h"
 
 namespace StratEngine
 {
-    VertexArray::VertexArray()
+    OpenGL_VArray::OpenGL_VArray()
     {
         glGenVertexArrays(1, &m_VertexArrayID); 
     }
 
-    VertexArray::~VertexArray()
+    OpenGL_VArray::~OpenGL_VArray()
     {
         glDeleteVertexArrays(1, &m_VertexArrayID);
     }
 
-    void VertexArray::Bind() const
+    void OpenGL_VArray::Bind() const
     {
         glBindVertexArray(m_VertexArrayID);
     }
 
-    void VertexArray::Unbind() const
+    void OpenGL_VArray::Unbind() const
     {
         glBindVertexArray(0);
     }
 
-    void VertexArray::AddBuffer(VertexBuffer& vertexBuffer)
+    void OpenGL_VArray::AddBuffer(VertexBuffer& vertexBuffer)
     {
         this->Bind();
         vertexBuffer.Bind();
@@ -49,9 +48,8 @@ namespace StratEngine
 
     }
 
-    void VertexArray::BindShaderAttrib(const std::vector<ShaderAttributes>& attributes)
+    void OpenGL_VArray::BindShaderAttrib(const std::vector<ShaderAttributes>& attributes)
     {
         m_ShaderAttributes = attributes;
     }
 }
-

@@ -28,6 +28,7 @@ file(GLOB_RECURSE STRATENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Renderer/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Event/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Architecture/OpenGL/*.cpp"
 )
 
 add_library(StratEngine 

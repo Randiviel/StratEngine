@@ -72,14 +72,10 @@ namespace StratEngine{
             1, 2, 3   // second Triangle
         };
         glEnable(GL_DEPTH_TEST);  
-        VertexArray VAO;
         std::vector<ShaderAttributes> layout = {
             {"a_Position", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
             {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false}
         };
-        VAO.BindShaderAttrib(layout);
-        VertexBuffer VBO(vertices, sizeof(vertices));
-        VAO.AddBuffer(VBO);
         Shader shader("Shaders/SandBoxShader.glsl"); 
         float lastFrame = 0.0f;
 
@@ -120,7 +116,6 @@ namespace StratEngine{
             glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
             // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
             shader.setMat4("projection", projection);
-            VAO.Bind();
             glDrawArrays(GL_TRIANGLES, 0, 36);
             // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
             
