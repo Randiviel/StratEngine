@@ -11,7 +11,6 @@ namespace StratEngine {
 
             virtual void Bind() const {};
             virtual void Unbind() const {}; 
-            virtual void AddBuffer(VertexBuffer& vertexBuffer) {};
             virtual void BindShaderAttrib(const std::vector<ShaderAttributes>& attributes) {};
     };
 }

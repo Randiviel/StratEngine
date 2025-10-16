@@ -31,6 +31,7 @@
 #include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
 #include "Renderer/Model.h"
+#include "Renderer/Scene.h"
 
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Buffer.h"

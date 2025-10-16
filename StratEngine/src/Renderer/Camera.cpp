@@ -1,5 +1,4 @@
 #include "pchstrat.h"
-#include "Camera.h"
 
 namespace StratEngine{
 

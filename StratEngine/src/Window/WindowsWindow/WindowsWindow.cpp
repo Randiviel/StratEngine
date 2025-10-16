@@ -1,5 +1,4 @@
 #include "pchstrat.h"
-#include "WindowsWindow.h"
 
 namespace StratEngine {
     WindowsWindow::WindowsWindow(const WindowProp& prop){

@@ -7,7 +7,7 @@ namespace StratEngine {
             VertexBuffer() = default;
             ~VertexBuffer() = default;
 
-            virtual inline void Bind() const { }; 
-            virtual inline void Unbind() const { }; 
+            virtual inline void Bind() { }; 
+            virtual inline void Unbind() { }; 
     };
 }

@@ -118,6 +118,8 @@ namespace StratEngine
         {
             glUniformMatrix4fv(glGetUniformLocation(m_ShaderID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
         }
+
+        void CalculateMartix(Camera& camera);
     private:
         bool checkCompileErrors(unsigned int shader, std::string type);
         bool checkLinkErrors(unsigned int program);
