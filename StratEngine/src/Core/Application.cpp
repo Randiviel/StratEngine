@@ -67,10 +67,6 @@ namespace StratEngine{
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
-        unsigned int indices[] = {  
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
-        };
 
         Shader shader("Shaders/SandBoxShader.glsl");
         auto renderer = std::make_unique<OpenGL_Renderer>();
@@ -81,13 +77,13 @@ namespace StratEngine{
         {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false}
         };
 
-        Scene myScene("MyScene");
+        Scene myScene("myScene");
         Model myModel("myModel");
-        Mesh myCube("myCube", vertices, layout);
+        Mesh myCube("myCube", vertices, layout, "Textures/Container.jpg");
         myModel.AddMesh(myCube);
         myScene.AddModel(myModel);
-        m_CurrentScene = &myScene;
         myScene.AddRenderer(std::move(renderer));
+        m_CurrentScene = &myScene;
 
         while (isRunning())
         {             

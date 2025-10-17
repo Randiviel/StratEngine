@@ -76,20 +76,12 @@ namespace StratEngine
 
     void Shader::CalculateMartix(Camera& camera)
     {
-                    // create transformations
-            glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+            // create transformations
             glm::mat4 view          = camera.GetViewMatrix();
             glm::mat4 projection    = glm::mat4(1.0f);
-            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
             view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
             projection = glm::perspective(glm::radians(45.0f), (float)StratConfig::WINDOW_HEIGHT / (float)StratConfig::WINDOW_WIDTH, 0.1f, 100.0f);
-            // retrieve the matrix uniform locations
-            unsigned int modelLoc = glGetUniformLocation(this->GetShader(), "model");
-            unsigned int viewLoc  = glGetUniformLocation(this->GetShader(), "view");
-            // pass them to the shaders (3 different ways)
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-            // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+            this->setMat4("view", view);
             this->setMat4("projection", projection);
     }
 

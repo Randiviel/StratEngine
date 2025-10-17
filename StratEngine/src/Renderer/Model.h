@@ -13,7 +13,7 @@ namespace StratEngine
         OpenGL_VArray VAO;
         OpenGL_Buffer VBO;
         std::vector<ShaderAttributes> ShaderAttribs;
-        Mesh(std::string name, std::vector<float>& vertices, std::vector<ShaderAttributes>& shaderAttributes);
+        Mesh(std::string name, std::vector<float>& vertices, std::vector<ShaderAttributes>& shaderAttributes, const char* texPath = "");
     };
 
     class Model 
