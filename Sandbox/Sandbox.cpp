@@ -1,26 +1,11 @@
 #include "StratEngine.h"
-
-class SandboxLayer : public StratEngine::Layer {
-        virtual void OnAttach() override
-        {
-
-        }
-        virtual void OnDetach() override
-        {
-
-        }
-        virtual void OnUpdate(float deltaTime) override
-        {
-            
-        }
-        virtual void OnEvent(StratEngine::Event& event) override
-        {
-
-        }
-};
+#include "EditorLayer/EditorLayer.h"
 
 StratEngine::Application* StratEngine::CreateApplication(){
     Application* app = new Application();
-    app->GetLayerStack()->PushLayer(new SandboxLayer);
+    EditorLayer* editor = new EditorLayer();
+    editor->SetWindowHandle(app->GetWindow()->GetWindowHandle());
+    editor->OnAttach();
+    app->GetLayerStack()->PushLayer(editor);
     return app;
 }

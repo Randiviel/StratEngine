@@ -1,4 +1,5 @@
 #include "pchstrat.h"
+#include "Model.h"
 
 namespace StratEngine
 {
@@ -35,6 +36,21 @@ namespace StratEngine
         VBO.Unbind();
     }
 
+    TransformComponent::TransformComponent()
+    {
+
+    }
+
+    TransformComponent::~TransformComponent()
+    {
+
+    }
+
+    void TransformComponent::Move(glm::vec3 direction)
+    {
+        m_MoveDirection = direction;
+    }
+
     Model::Model(std::string name)
     {
 
@@ -61,3 +77,5 @@ namespace StratEngine
     }
 
 }
+
+

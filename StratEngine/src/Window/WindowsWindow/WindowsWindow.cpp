@@ -1,4 +1,5 @@
 #include "pchstrat.h"
+#include "WindowsWindow.h"
 
 namespace StratEngine {
     WindowsWindow::WindowsWindow(const WindowProp& prop){
@@ -22,7 +23,6 @@ namespace StratEngine {
         glfwSetCursorPosCallback(m_WindowHandle, mousepos_callback);
         glfwSetMouseButtonCallback(m_WindowHandle, mousebutton_callback);
         glfwSetWindowSizeCallback(m_WindowHandle, window_size_callback);
-        glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         glfwSwapInterval(1);
 
             if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -43,9 +43,22 @@ namespace StratEngine {
 
     void WindowsWindow::GetWindowSize()
     {
+        
     }
 
-    void WindowsWindow::SetEventCallback(std::function<void(Event& e)> callback)
+    void WindowsWindow::HideCursor(bool option)
+    {
+        if(option)
+        {
+            glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+        else
+        {
+            glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+
+    }
+    void WindowsWindow::SetEventCallback(std::function<void(Event &e)> callback)
     {
         m_EventCallback = callback;
     }

@@ -29,12 +29,9 @@ namespace StratEngine {
     {
 
         m_Renderer->BeginScene(m_Camera);
-            for(const auto & [key, model] : m_Models)
+            for(auto & [key, model] : m_Models)
             {            
-                for(const auto & [name, mesh] : model.GetMeshes())
-                {
-                    m_Renderer->RenderMesh(mesh);
-                }
+                m_Renderer->RenderModel(model);
             }       
         m_Renderer->EndScene();
     }

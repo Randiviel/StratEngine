@@ -28,6 +28,7 @@ namespace StratEngine {
             RenderAPI m_RenderAPI = RenderAPI::OpenGL;
             Scene* m_CurrentScene;
             float m_DeltaTime;
+            bool m_MouseLock = true;
         private:
             bool isRunning();
             void CheckInput();

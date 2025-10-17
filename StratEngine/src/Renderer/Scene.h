@@ -4,8 +4,10 @@
 #include "Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
 
-namespace StratEngine {
-    class Scene {
+namespace StratEngine 
+{
+    class Scene 
+    {
         public:
             Scene(std::string name);
             ~Scene();
@@ -22,4 +24,15 @@ namespace StratEngine {
             Camera m_Camera;
             std::unique_ptr<OpenGL_Renderer> m_Renderer;
     };
+
+    class SceneManager 
+    {
+        public:
+            SceneManager();
+            ~SceneManager();
+
+            void AddScene(std::unique_ptr<Scene> scene);
+        private:
+            std::vector<std::unique_ptr> m_Scenes;
+    }
 }

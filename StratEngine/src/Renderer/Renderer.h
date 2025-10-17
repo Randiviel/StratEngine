@@ -9,7 +9,7 @@ namespace StratEngine {
 
             virtual void BeginScene(Camera& camera) {};
             virtual void EndScene() {};
-            virtual void RenderMesh(const Mesh& mesh) {};
+            virtual void RenderModel(Model& model) {};
 
         private:
 

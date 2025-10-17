@@ -14,6 +14,7 @@ namespace StratEngine {
 
         virtual void SetWindowSize() override;
         virtual void GetWindowSize() override;
+        void HideCursor(bool option);
         void SetEventCallback(std::function<void(Event& e)> callback);
 
         GLFWwindow* GetWindowHandle();

@@ -56,6 +56,7 @@ target_include_directories(StratEngine
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb_image
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor
+        ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
 target_precompile_headers(StratEngine 
@@ -69,7 +70,9 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/Shaders DESTINATION ${CMAKE_CU
 
 target_link_libraries(MyApp PRIVATE StratEngine)
 
-target_include_directories(MyApp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine)
+target_include_directories(MyApp PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/vendor/imgui)
+
 
 #-------------------------------------------
 # Old way of adding files to StratEngine library

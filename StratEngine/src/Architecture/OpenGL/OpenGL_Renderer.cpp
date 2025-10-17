@@ -30,16 +30,22 @@ namespace StratEngine
         glBindVertexArray(0);
     }
 
-    void OpenGL_Renderer::RenderMesh(const Mesh &mesh)
+    void OpenGL_Renderer::RenderModel(Model& model)
     {
-        mesh.VAO.Bind();
-            glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-            unsigned int modelLoc = glGetUniformLocation(m_Shader->GetShader(), "model");
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        auto& transform = model.GetTransformComponent();
+            for(auto & [name, mesh] : model.GetMeshes())
+            {
+                mesh.VAO.Bind();
+                glm::mat4 matrixModel        = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+                if(model.GetTransformComponent().GetMoveDirection() != glm::vec3{0.0f, 0.0f, 0.0f})
+                {
+                    matrixModel = glm::translate(matrixModel, transform.GetMoveDirection());
+                }
+                m_Shader->setMat4("model", matrixModel);
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+            }
+        transform.SetMoveDirection(glm::vec3{0.0f, 0.0f, 0.0f});
     }
 
     void OpenGL_Renderer::SetShader(Shader &shader)

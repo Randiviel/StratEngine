@@ -12,7 +12,7 @@ namespace StratEngine
 
             virtual void BeginScene(Camera& camera) override;
             virtual void EndScene() override;
-            virtual void RenderMesh(const Mesh& mesh) override;
+            virtual void RenderModel(Model& model) override;
             void SetShader(Shader& shader);
         private:
             Shader* m_Shader;
