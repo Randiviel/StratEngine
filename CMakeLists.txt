@@ -10,6 +10,7 @@ add_subdirectory(vendor/GLFW)
 add_subdirectory(vendor/imgui)
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/stb_image)
+add_subdirectory(vendor/spdlog)
 #-------------------------------------------
 add_library(Glad_lib
     STATIC
@@ -44,6 +45,7 @@ target_link_libraries(StratEngine
         Glad_lib
         glm
         stb_image
+        spdlog
         )
 
 target_include_directories(StratEngine 
@@ -55,6 +57,7 @@ target_include_directories(StratEngine
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/backends/
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb_image
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor
         ${CMAKE_CURRENT_SOURCE_DIR}
         )

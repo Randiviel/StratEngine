@@ -72,7 +72,6 @@ namespace StratEngine{
         m_Renderer->SetShader(myShader);
         auto& myScene = m_SceneManager.CreateScene("myScene");
         m_SceneManager.SetCurrentScene("myScene");
-        
 
         while (isRunning())
         {
