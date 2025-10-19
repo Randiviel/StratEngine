@@ -67,8 +67,8 @@ namespace StratEngine
     }
 
     void Model::AddMesh(Mesh& mesh)
-    {
-        m_Meshes.emplace(mesh.Name, mesh);
+    {   
+        m_Meshes.insert({mesh.Name, mesh});
     }
 
     void Model::RemoveMesh(std::string &name)

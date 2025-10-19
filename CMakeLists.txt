@@ -66,6 +66,7 @@ target_precompile_headers(StratEngine
 #-------------------------------------------
 
 add_executable(MyApp Sandbox/Sandbox.cpp)
+target_sources(MyApp PUBLIC Sandbox/EditorLayer/EditorLayer.cpp)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/Shaders DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/bin)
 
 target_link_libraries(MyApp PRIVATE StratEngine)

@@ -10,7 +10,7 @@ namespace StratEngine
 
     OpenGL_Renderer::~OpenGL_Renderer()
     {
-
+        std::cout << "Destroying OpenGL_Renderer" << std::endl;
     }
 
     void OpenGL_Renderer::BeginScene(Camera& camera)
@@ -27,7 +27,7 @@ namespace StratEngine
     void OpenGL_Renderer::EndScene()
     {
         glUseProgram(0);
-        glBindVertexArray(0);
+        // glBindVertexArray(0);
     }
 
     void OpenGL_Renderer::RenderModel(Model& model)

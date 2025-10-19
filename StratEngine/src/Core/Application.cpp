@@ -1,5 +1,6 @@
 #include "pchstrat.h"
 #include "StratConfig.h"
+#include "Application.h"
 
 namespace StratEngine{
 
@@ -10,6 +11,7 @@ namespace StratEngine{
             m_Window = std::make_unique<WindowsWindow>(WindowProp{StratConfig::WINDOW_TITLE, StratConfig::WINDOW_HEIGHT, StratConfig::WINDOW_WIDTH});
             m_Window->SetEventCallback([this](Event& e) {OnEvent(e);});
             m_Window->HideCursor(true);
+            m_Renderer = std::make_unique<OpenGL_Renderer>();
         }
         else
             std::cout << "RenderAPI: None\n";
@@ -22,8 +24,6 @@ namespace StratEngine{
 
     void Application::Run()
     {
-        float lastFrame = 0.0f;
-
         std::vector<float> vertices = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -68,37 +68,28 @@ namespace StratEngine{
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
 
-        Shader shader("Shaders/SandBoxShader.glsl");
-        auto renderer = std::make_unique<OpenGL_Renderer>();
-        renderer->SetShader(shader);
-
-        std::vector<ShaderAttributes> layout = {
-        {"a_Position", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
-        {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false}
-        };
-
-        Scene myScene("myScene");
-        Model myModel("myModel");
-        Mesh myCube("myCube", vertices, layout, "Textures/Container.jpg");
-        myModel.AddMesh(myCube);
-        myScene.AddModel(myModel);
-        myScene.AddRenderer(std::move(renderer));
-        m_CurrentScene = &myScene;
+        Shader myShader("Shaders/SandBoxShader.glsl");
+        m_Renderer->SetShader(myShader);
+        auto& myScene = m_SceneManager.CreateScene("myScene");
+        m_SceneManager.SetCurrentScene("myScene");
+        
 
         while (isRunning())
-        {             
+        {
+            // Check Keyboard Input
             CheckInput();
-            // DeltaTime
-            float currentFrame = glfwGetTime();
-            m_DeltaTime = currentFrame - lastFrame;
-            lastFrame = currentFrame;  
-            // Background Color
-            m_CurrentScene->Render();
 
+            // DeltaTime
+            CalculateDeltaTime();
+
+            // Render Scene
+            m_SceneManager.GetCurrentScene()->Render(*m_Renderer);
+
+            // Update all Layers
             for(auto layer : m_LayerStack)
-            {
                 layer->OnUpdate(m_DeltaTime);
-            }
+
+            // Swap buffers
             glfwSwapBuffers(m_Window->GetWindowHandle());
             glfwPollEvents();
         }
@@ -131,7 +122,7 @@ namespace StratEngine{
                 auto mousepos = e.GetMousePos();
                 float mouseX = static_cast<float>(mousepos.first);
                 float mouseY = static_cast<float>(mousepos.second);
-                m_CurrentScene->GetCamera().ProcessMouseMovement(mouseX, mouseY);
+                m_SceneManager.GetCurrentScene()->GetCamera().ProcessMouseMovement(mouseX, mouseY);
             });
 
             Dispatcher.Dispatch<MousePressedEvent>([this](MousePressedEvent& e){
@@ -150,13 +141,20 @@ namespace StratEngine{
     void Application::CheckInput()
     {
         if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_W) == GLFW_PRESS)
-                m_CurrentScene->GetCamera().MoveCamera(CameraMovement::FORWARD, m_DeltaTime);
+                m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::FORWARD, m_DeltaTime);
         if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_S) == GLFW_PRESS)
-                m_CurrentScene->GetCamera().MoveCamera(CameraMovement::BACKWARD, m_DeltaTime);
+                m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::BACKWARD, m_DeltaTime);
         if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_A) == GLFW_PRESS)
-                m_CurrentScene->GetCamera().MoveCamera(CameraMovement::LEFT, m_DeltaTime);
+                m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::LEFT, m_DeltaTime);
         if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_D) == GLFW_PRESS)
-                m_CurrentScene->GetCamera().MoveCamera(CameraMovement::RIGHT, m_DeltaTime);
+                m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::RIGHT, m_DeltaTime);
+    }
+
+    void Application::CalculateDeltaTime()
+    {
+            float currentFrame = glfwGetTime();
+            m_DeltaTime = currentFrame - m_LastFrame;
+            m_LastFrame = currentFrame;  
     }
 }
 

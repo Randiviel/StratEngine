@@ -14,15 +14,14 @@ namespace StratEngine
             
             void AddModel(Model& model);
             void AddCamera(Camera& camera);
-            void AddRenderer(std::unique_ptr<OpenGL_Renderer> renderer);
-            void Render();
+            void Render(Renderer& renderer);
             inline Camera& GetCamera() { return m_Camera; };
+            inline std::string& GetName() { return m_Name; };
         private:
             std::string m_Name;
             // TODO: Make Entitity Class and make it EntityContainer
             std::unordered_map<std::string, Model> m_Models;
             Camera m_Camera;
-            std::unique_ptr<OpenGL_Renderer> m_Renderer;
     };
 
     class SceneManager 
@@ -31,8 +30,13 @@ namespace StratEngine
             SceneManager();
             ~SceneManager();
 
-            void AddScene(std::unique_ptr<Scene> scene);
+            void DeleteScene(std::string& sceneName);
+            void SetCurrentScene(const std::string& sceneName);
+            Scene& CreateScene(std::string name);
+            Scene* GetCurrentScene();
+            inline std::unordered_map<std::string, std::unique_ptr<Scene>>& GetAllScenes() { return m_Scenes; };
         private:
-            std::vector<std::unique_ptr> m_Scenes;
-    }
+            std::unordered_map<std::string, std::unique_ptr<Scene>> m_Scenes;
+            std::string m_CurrentScene;
+    };
 }

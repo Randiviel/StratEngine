@@ -70,6 +70,7 @@ namespace StratEngine
 
     Shader::~Shader()
     {
+        std::cout << "Destroying Shader, program ID: " << m_ShaderID << std::endl;
         if(m_ShaderID != 0)
         glDeleteProgram(m_ShaderID);
     }

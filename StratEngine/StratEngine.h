@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "Core/Application.h"
-#include "Core/Entrypoint.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
