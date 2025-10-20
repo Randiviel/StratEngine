@@ -80,6 +80,11 @@ namespace StratEngine {
         windowInstance->m_EventCallback(event);
         }
 
+        if ((action == GLFW_RELEASE) && windowInstance->m_EventCallback) {
+        KeyReleasedEvent event(key);
+        windowInstance->m_EventCallback(event);
+        }
+
     }
 
     void WindowsWindow::mousepos_callback(GLFWwindow *window, double xpos, double ypos)

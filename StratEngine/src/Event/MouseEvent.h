@@ -31,6 +31,7 @@ namespace StratEngine {
     public:
         MouseReleasedEvent(int butnum) : m_butnum(butnum) {};
         virtual ~MouseReleasedEvent() = default;
+        inline int GetMouseButton() {return m_butnum; };
         EVENT_CLASS_TYPE(MouseButtonReleased)
         EVENT_CLASS_CATEGORY(EventCategory::MouseEvent | EventCategory::MouseButtonEvent | EventCategory::InputEvent)
 

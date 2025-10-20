@@ -110,10 +110,11 @@ namespace StratEngine{
         EventDispatcher Dispatcher(e);
 
         Dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& e){
-        std::cout << StratEngine::KeyCodeToString(e.GetKey()) << " " << e.GetKey() << "\n";
-            if(StratEngine::KeyCodeToString(e.GetKey()) == "Left Alt")
+            Input::UpdateKeyState(e.GetKey(), true);
+
+            if(Input::IsKeyPressed(STRAT_KEY_LEFT_ALT))
             {
-                if(m_MouseLock)
+                if(m_MouseLock == true)
                 {
                     m_MouseLock = false;
                     m_Window->HideCursor(false);
@@ -126,21 +127,24 @@ namespace StratEngine{
             }
         });
 
-        if(m_MouseLock)
-        {
-            Dispatcher.Dispatch<MouseMovedEvent>([this](MouseMovedEvent& e){
-                auto mousepos = e.GetMousePos();
-                float mouseX = static_cast<float>(mousepos.first);
-                float mouseY = static_cast<float>(mousepos.second);
-                m_SceneManager.GetCurrentScene()->GetCamera().ProcessMouseMovement(mouseX, mouseY);
-            });
+        Dispatcher.Dispatch<KeyReleasedEvent>([this](KeyReleasedEvent& e){
+            Input::UpdateKeyState(e.GetKey(), false);
+        });
 
-            Dispatcher.Dispatch<MousePressedEvent>([this](MousePressedEvent& e){
-                int mousebutton = e.GetMouseButton();
-                std::cout << "MouseButtonPressed: " << mousebutton << '\n';
-            });
-        }
+        Dispatcher.Dispatch<MouseMovedEvent>([this](MouseMovedEvent& e){
+            auto mousepos = e.GetMousePos();
+            float mouseX = static_cast<float>(mousepos.first);
+            float mouseY = static_cast<float>(mousepos.second);
+            Input::UpdateMousePosition(mouseX, mouseY);
+        });
 
+        Dispatcher.Dispatch<MousePressedEvent>([this](MousePressedEvent& e){
+            Input::UpdateKeyState(e.GetMouseButton(), true);
+        });
+
+        Dispatcher.Dispatch<MouseReleasedEvent>([this](MouseReleasedEvent& e){
+            Input::UpdateKeyState(e.GetMouseButton(), false);
+        });
     }
 
     bool Application::isRunning()
@@ -150,14 +154,20 @@ namespace StratEngine{
 
     void Application::CheckInput()
     {
-        if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_W) == GLFW_PRESS)
+        if(m_MouseLock)
+        {
+        if(Input::IsKeyPressed(STRAT_KEY_W))
                 m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::FORWARD, m_DeltaTime);
-        if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_S) == GLFW_PRESS)
+        if(Input::IsKeyPressed(STRAT_KEY_S))
                 m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::BACKWARD, m_DeltaTime);
-        if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_A) == GLFW_PRESS)
+        if(Input::IsKeyPressed(STRAT_KEY_A))
                 m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::LEFT, m_DeltaTime);
-        if (glfwGetKey(m_Window->GetWindowHandle(), GLFW_KEY_D) == GLFW_PRESS)
+        if(Input::IsKeyPressed(STRAT_KEY_D))
                 m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::RIGHT, m_DeltaTime);
+        
+                auto mousePos = Input::GetMousePosition();
+                m_SceneManager.GetCurrentScene()->GetCamera().ProcessMouseMovement(mousePos.first, mousePos.second);
+        }
     }
 
     void Application::CalculateDeltaTime()
@@ -168,3 +178,16 @@ namespace StratEngine{
     }
 }
 
+            // if(StratEngine::KeyCodeToString(e.GetKey()) == "Left Alt")
+            // {
+            //     if(m_MouseLock)
+            //     {
+            //         m_MouseLock = false;
+            //         m_Window->HideCursor(false);
+            //     }
+            //     else
+            //     {
+            //         m_MouseLock = true;
+            //         m_Window->HideCursor(true);
+            //     }
+            // }

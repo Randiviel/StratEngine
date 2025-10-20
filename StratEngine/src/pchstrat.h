@@ -20,6 +20,7 @@
 #include "Core/Application.h"
 #include "Core/Layer.h"
 #include "Core/Logger.h"
+#include "Core/Input.h"
 
 #include "Event/EventDispatcher.h"
 #include "Event/KeyboardEvent.h"
