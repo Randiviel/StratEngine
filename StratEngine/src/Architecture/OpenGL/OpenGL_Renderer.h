@@ -14,8 +14,13 @@ namespace StratEngine
             virtual void EndScene() override;
             virtual void RenderModel(Model& model) override;
             virtual void SetShader(Shader& shader) override;
+            void InitFrameBuffer();
+            inline virtual void* GetFrame() override { return (void*)(intptr_t)m_Texture; } ;
         private:
             Shader* m_Shader;
+            GLuint m_FBO = 0;
+            GLuint m_Texture = 0;
+            GLuint m_RBO = 0;
 
     };
 }

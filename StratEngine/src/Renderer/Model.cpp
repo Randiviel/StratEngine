@@ -53,7 +53,7 @@ namespace StratEngine
 
     Model::Model(std::string name)
     {
-
+        m_Name = name;
     }
 
     Model::Model(std::string& name, std::unordered_map<std::string, Mesh> meshes)
@@ -68,7 +68,7 @@ namespace StratEngine
 
     void Model::AddMesh(Mesh& mesh)
     {   
-        m_Meshes.insert({mesh.Name, mesh});
+        m_Meshes.emplace(mesh.Name, std::move(mesh));
     }
 
     void Model::RemoveMesh(std::string &name)

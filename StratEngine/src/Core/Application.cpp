@@ -68,13 +68,24 @@ namespace StratEngine{
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
 
+        std::vector<ShaderAttributes> layout = {
+            {"a_Position", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
+            {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false}
+        };
         Shader myShader("Shaders/SandBoxShader.glsl");
         m_Renderer->SetShader(myShader);
         auto& myScene = m_SceneManager.CreateScene("myScene");
         m_SceneManager.SetCurrentScene("myScene");
+        Mesh mesh("MyCube", vertices, layout, "Textures/Container.jpg");
+        Model model("MyModel");
+        model.AddMesh(mesh);
+        myScene.AddModel(model);
+
 
         while (isRunning())
         {
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // Check Keyboard Input
             CheckInput();
 

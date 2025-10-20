@@ -6,7 +6,6 @@
 StratEngine::Application* StratEngine::CreateApplication(){
     Application* app = new Application();
     EditorLayer* editor = new EditorLayer(app);
-    editor->SetWindowHandle(app->GetWindow()->GetWindowHandle());
     editor->OnAttach();
     app->GetLayerStack()->PushLayer(editor);
     return app;

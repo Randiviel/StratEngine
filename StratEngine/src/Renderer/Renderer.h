@@ -11,7 +11,7 @@ namespace StratEngine {
             virtual void EndScene() {};
             virtual void RenderModel(Model& model) {};
             virtual void SetShader(Shader& shader) {};
-
+            virtual void* GetFrame() = 0;
         private:
 
     };

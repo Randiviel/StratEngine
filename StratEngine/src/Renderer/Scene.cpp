@@ -14,7 +14,7 @@ namespace StratEngine {
 
     void Scene::AddModel(Model& model)
     {
-        m_Models.insert({model.GetName(), model});
+        m_Models.emplace(model.GetName(), std::move(model));
     }
 
     void Scene::AddCamera(Camera& camera)

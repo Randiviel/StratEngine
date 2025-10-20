@@ -6,13 +6,19 @@ class EditorLayer : public StratEngine::Layer {
         EditorLayer(StratEngine::Application* app);
         virtual void OnAttach() override;
         virtual void OnDetach() override;
-        inline void SetWindowHandle(GLFWwindow* windowhandle) { m_WindowHandle = windowhandle; };
     private:
         virtual void OnUpdate(float deltaTime) override;
         virtual void OnEvent(StratEngine::Event& event) override;
+        void MainWindow();
+        void Viewport();
+        void EntityProperties();
+        void SetupDockspace();
+        void AssetManager();
+        void Objects();
+
     private:
-        GLFWwindow* m_WindowHandle;
         StratEngine::Application* m_App;
+        ImGuiID m_DockSpaceID;
         bool m_ToolActive = true;
         bool m_FirstLaunch = true;
 };
