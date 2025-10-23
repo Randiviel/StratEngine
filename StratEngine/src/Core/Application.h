@@ -22,7 +22,7 @@ namespace StratEngine {
             inline RenderAPI GetRenderAPI() const { return m_RenderAPI; } ;
             inline LayerStack* GetLayerStack() { return &m_LayerStack; } ;  
             inline Renderer& GetRenderer() { return *m_Renderer; } ;
-            inline SceneManager* GetSceneManager() { return &m_SceneManager; };  
+            inline SceneManager* GetSceneManager() { return &m_SceneManager; };
         private:
             std::unique_ptr<WindowsWindow> m_Window;
             LayerStack m_LayerStack;
@@ -31,7 +31,7 @@ namespace StratEngine {
             SceneManager m_SceneManager;
             float m_DeltaTime;
             float m_LastFrame = 0.0f;
-            bool m_MouseLock = true;
+            bool m_MouseLock = false;
         private:
             bool isRunning();
             void CheckInput();

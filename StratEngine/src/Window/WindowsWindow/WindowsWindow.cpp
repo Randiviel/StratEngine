@@ -9,6 +9,7 @@ namespace StratEngine {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         
         m_WindowHandle = glfwCreateWindow(prop.height, prop.width, prop.name, NULL, NULL);
         if (!m_WindowHandle)
@@ -41,9 +42,16 @@ namespace StratEngine {
     {
     }
 
-    void WindowsWindow::GetWindowSize()
+    std::pair<float, float> WindowsWindow::GetWindowSize()
     {
-        
+        int width, height;
+        glfwGetWindowSize(m_WindowHandle, &width, &height);
+        return std::pair<float, float>((float)width, (float)height);
+    }
+
+    void WindowsWindow::SetMousePosition(float x, float y)
+    {
+        glfwSetCursorPos(m_WindowHandle, (double)x, (double)y);
     }
 
     void WindowsWindow::HideCursor(bool option)

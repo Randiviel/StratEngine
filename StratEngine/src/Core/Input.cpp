@@ -1,5 +1,5 @@
 #include "pchstrat.h"
-#include "Input.h"
+#include "StratConfig.h"
 
 namespace StratEngine
 {

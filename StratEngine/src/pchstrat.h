@@ -14,6 +14,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "stb_image.h"
+#include "entt/entt.hpp"
 
 #include "Window/Window.h"
 #include "Window/WindowsWindow/WindowsWindow.h"
@@ -35,6 +36,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/Model.h"
 #include "Renderer/Scene.h"
+#include "Renderer/Entity.h"
 
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Buffer.h"

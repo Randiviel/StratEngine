@@ -7,6 +7,16 @@ namespace StratEngine
     OpenGL_Renderer::OpenGL_Renderer() : m_Shader(nullptr)
     {
         InitFrameBuffer();
+        glGenTextures(1, &m_DefaultTexture);
+        glBindTexture(GL_TEXTURE_2D, m_DefaultTexture);
+
+        unsigned char magenta[] = {255, 0, 255, 255}; // Fioletowy
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, 
+                    GL_RGBA, GL_UNSIGNED_BYTE, magenta);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     OpenGL_Renderer::~OpenGL_Renderer()
@@ -20,9 +30,12 @@ namespace StratEngine
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
-            
+
             glUseProgram(m_Shader->GetShader());
+        if(m_EditorCamera == nullptr)
             m_Shader->CalculateMartix(camera);
+        else
+            m_Shader->CalculateMartix(*m_EditorCamera);
 
     }
 
@@ -30,7 +43,8 @@ namespace StratEngine
     {
         glUseProgram(0);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        // glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindVertexArray(0);
     }
 
     void OpenGL_Renderer::RenderModel(Model& model)
@@ -39,17 +53,18 @@ namespace StratEngine
             for(auto & [name, mesh] : model.GetMeshes())
             {
                 mesh.VAO.Bind();
+                
+                if(mesh.Texture != 0)
+                    glBindTexture(GL_TEXTURE_2D, mesh.Texture);
+                else
+                    glBindTexture(GL_TEXTURE_2D, m_DefaultTexture);
 
                 glm::mat4 matrixModel        = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-
-                if(model.GetTransformComponent().GetMoveDirection() != glm::vec3{0.0f, 0.0f, 0.0f})
-                {
-                    matrixModel = glm::translate(matrixModel, transform.GetMoveDirection());
-                }
+                matrixModel = glm::translate(matrixModel, transform.GetPosition());
+                matrixModel = glm::scale(matrixModel, transform.GetScale());
                 m_Shader->setMat4("model", matrixModel);
                 glDrawArrays(GL_TRIANGLES, 0, 36);
-            }
-        transform.SetMoveDirection(glm::vec3{0.0f, 0.0f, 0.0f});
+            }   
     }
 
     void OpenGL_Renderer::SetShader(Shader &shader)

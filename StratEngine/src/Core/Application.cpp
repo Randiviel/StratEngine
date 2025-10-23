@@ -10,7 +10,7 @@ namespace StratEngine{
         {
             m_Window = std::make_unique<WindowsWindow>(WindowProp{StratConfig::WINDOW_TITLE, StratConfig::WINDOW_HEIGHT, StratConfig::WINDOW_WIDTH});
             m_Window->SetEventCallback([this](Event& e) {OnEvent(e);});
-            m_Window->HideCursor(true);
+            m_Window->HideCursor(false);
             m_Renderer = std::make_unique<OpenGL_Renderer>();
         }
         else
@@ -77,10 +77,23 @@ namespace StratEngine{
         auto& myScene = m_SceneManager.CreateScene("myScene");
         m_SceneManager.SetCurrentScene("myScene");
         Mesh mesh("MyCube", vertices, layout, "Textures/Container.jpg");
+        Mesh mesh2("MyCube", vertices, layout);
         Model model("MyModel");
+        Model model2("MySecondModel");
+        model2.GetTransformComponent().SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
         model.AddMesh(mesh);
+        model2.AddMesh(mesh2);
         myScene.AddModel(model);
+        myScene.AddModel(model2);
+        
+        entt::registry registry;
+        auto entity = registry.create();
+        auto &transform = registry.emplace<TransformComponent>(entity);
+        transform.SetPosition(glm::vec3(0.0f, 1.0f, 2.0f));
+        auto& pos = transform.GetPosition();
+        STRAT_CORE_TRACE("The position of entity is: {0}, {1}, {2}",  pos.x, pos.y, pos.z);
 
+        // STRAT_CORE_TRACE("Entity ID: {0}", entity.GetName());
 
         while (isRunning())
         {
@@ -96,7 +109,7 @@ namespace StratEngine{
             m_SceneManager.GetCurrentScene()->Render(*m_Renderer);
 
             // Update all Layers
-            for(auto layer : m_LayerStack)
+            for(auto& layer : m_LayerStack)
                 layer->OnUpdate(m_DeltaTime);
 
             // Swap buffers
@@ -121,6 +134,7 @@ namespace StratEngine{
                 }
                 else
                 {
+                    m_SceneManager.GetCurrentScene()->GetCamera().ResetFirstTime();
                     m_MouseLock = true;
                     m_Window->HideCursor(true);
                 }
@@ -135,6 +149,7 @@ namespace StratEngine{
             auto mousepos = e.GetMousePos();
             float mouseX = static_cast<float>(mousepos.first);
             float mouseY = static_cast<float>(mousepos.second);
+
             Input::UpdateMousePosition(mouseX, mouseY);
         });
 
@@ -145,6 +160,14 @@ namespace StratEngine{
         Dispatcher.Dispatch<MouseReleasedEvent>([this](MouseReleasedEvent& e){
             Input::UpdateKeyState(e.GetMouseButton(), false);
         });
+        
+        if(!m_MouseLock)
+        {
+            for(auto& layer : m_LayerStack)
+            {
+                layer->OnEvent();
+            }
+        }
     }
 
     bool Application::isRunning()
@@ -165,8 +188,8 @@ namespace StratEngine{
         if(Input::IsKeyPressed(STRAT_KEY_D))
                 m_SceneManager.GetCurrentScene()->GetCamera().MoveCamera(CameraMovement::RIGHT, m_DeltaTime);
         
-                auto mousePos = Input::GetMousePosition();
-                m_SceneManager.GetCurrentScene()->GetCamera().ProcessMouseMovement(mousePos.first, mousePos.second);
+            auto mousePos = Input::GetMousePosition();
+            m_SceneManager.GetCurrentScene()->GetCamera().ProcessMouseMovement(mousePos.first, mousePos.second);
         }
     }
 

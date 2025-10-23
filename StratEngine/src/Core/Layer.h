@@ -11,7 +11,7 @@ namespace StratEngine {
         virtual void OnAttach() {}
         virtual void OnDetach() {}
         virtual void OnUpdate(float deltaTime) {}
-        virtual void OnEvent(Event& event) {}
+        virtual void OnEvent() {}
 
         inline const char* GetName() const { return m_DebugName; }
 

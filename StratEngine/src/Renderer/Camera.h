@@ -21,6 +21,7 @@ namespace StratEngine
             void MoveCamera(CameraMovement direction, float deltatime);
             void ProcessMouseMovement(float xPos, float yPos);
             glm::mat4 GetViewMatrix();
+            inline void ResetFirstTime() { m_firstTime = true; };
         private:
             glm::vec3 m_Position;
             glm::vec3 m_Front;

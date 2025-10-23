@@ -46,9 +46,7 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    NewFrame();
     
     MainWindow();
     Viewport();
@@ -56,16 +54,31 @@ void EditorLayer::OnUpdate(float deltaTime)
     AssetManager();
     Objects(); 
     
+    EndFrame();
+}
+
+void EditorLayer::OnEvent()
+{
+    if(StratEngine::Input::IsKeyPressed(STRAT_KEY_J))
+    {
+        STRAT_CLIENT_TRACE("The key J is pressed!");
+    }
+}
+
+void EditorLayer::NewFrame()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void EditorLayer::EndFrame()
+{
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     ImGui::UpdatePlatformWindows();
     ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(m_App->GetWindow()->GetWindowHandle());     
-}
-
-void EditorLayer::OnEvent(StratEngine::Event &event)
-{
-
+    glfwMakeContextCurrent(m_App->GetWindow()->GetWindowHandle());    
 }
 
 void EditorLayer::MainWindow()
@@ -100,7 +113,7 @@ void EditorLayer::MainWindow()
             if (ImGui::MenuItem("SetScene", "Ctrl+5")) { 
                 m_App->GetSceneManager()->SetCurrentScene("Editor Scene"); 
             }
-            if (ImGui::MenuItem("Close", "Ctrl+W")) { m_ToolActive = false; }
+            if (ImGui::MenuItem("Close", "Ctrl+W")) { m_EditorInfo.ToolActive = false; }
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Settings"))
@@ -135,9 +148,54 @@ void EditorLayer::Viewport()
 
 void EditorLayer::EntityProperties()
 {
+    float position[3] = {0.0f, 0.0f, 0.0f};
+    float scale[3] = {1.0f, 1.0f, 1.0f};
+    auto& models = m_App->GetSceneManager()->GetCurrentScene()->GetAllModels();
+    auto it = models.find(m_EditorInfo.SelectedEntity);
+    if(it != models.end())
+    {
+        auto& modelPos = it->second.GetTransformComponent().GetPosition();
+        auto& modelScale = it->second.GetTransformComponent().GetScale();
+        position[0] = modelPos.x;
+        position[1] = modelPos.y;
+        position[2] = modelPos.z;
+        scale[0] = modelScale.x;
+        scale[1] = modelScale.y;
+        scale[2] = modelScale.z;
+
+    }
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Properties", nullptr, flags);
+
+            // Wklęsły panel z ramką
+        ImGui::BeginChild("PropertiesPanel", ImVec2(0, 105), true, 
+                        ImGuiWindowFlags_AlwaysUseWindowPadding);
+        
+        // Tutaj umieszczasz zawartość (inputy, slidery, itp.)
+        ImGui::Text("Transform");
+        ImGui::Separator();
+        
+        ImGui::DragFloat3("Position", position, 0.1f);
+        
+        float rotation[3] = {0.0f, 0.0f, 0.0f};
+        ImGui::DragFloat3("Rotation", rotation, 0.1f);
+        ImGui::DragFloat3("Scale", scale, 0.1f);
+
+        if(it != models.end())
+        {
+            it->second.GetTransformComponent().SetPosition(glm::vec3(position[0], position[1], position[2]));
+            it->second.GetTransformComponent().SetScale(scale[0], scale[1], scale[2]);
+        }
+        
+        ImGui::EndChild();
+
+        ImGui::BeginChild("Texture", ImVec2(0, 100), true, ImGuiWindowFlags_AlwaysUseWindowPadding);
+        ImGui::Text("Texture");
+        ImGui::Separator();
+        ImGui::EndChild();
+
     ImGui::End();
+
 
 }
 
@@ -155,7 +213,62 @@ void EditorLayer::AssetManager()
 
 void EditorLayer::Objects()
 {
+    static int selectedRow = -1;
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Objects", nullptr, flags);
+    // Lewa strona - lista obiektów
+    ImGui::BeginChild("ObjectList", ImVec2(200, 0), true);
+    {
+        if(ImGui::BeginTable("MyTable", 1, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
+        {
+            int row = 0;
+            for(auto& model : m_App->GetSceneManager()->GetCurrentScene()->GetAllModels())
+            {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                
+                if(ImGui::Selectable(model.first.c_str(), selectedRow == row, 
+                                    ImGuiSelectableFlags_SpanAllColumns))
+                {
+                    selectedRow = row;
+                    m_EditorInfo.SelectedEntity = model.first; // Zapisz nazwę wybranego modelu
+                }
+                row++;
+            }
+            ImGui::EndTable();
+        }
+    }
+    ImGui::EndChild();
+    
+    // ImGui::SameLine(); // To samo okno, obok
+    
+    // // Prawa strona - szczegóły wybranego obiektu
+    // ImGui::BeginChild("ObjectDetails", ImVec2(0, 0), true);
+    // {
+    //     if(selectedRow >= 0)
+    //     {
+    //         ImGui::Text("Selected: %s", m_EditorInfo.SelectedEntity.c_str());
+    //         ImGui::Separator();
+            
+    //         // Tutaj możesz dodać właściwości wybranego obiektu
+    //         auto& models = m_App->GetSceneManager()->GetCurrentScene()->GetAllModels();
+    //         auto it = models.find(m_EditorInfo.SelectedEntity);
+    //         if(it != models.end())
+    //         {
+    //             // Edytuj właściwości modelu
+    //             ImGui::Text("Position: guwno");
+    //             // ImGui::DragFloat3("Pos", &it->second->position);
+                
+    //             ImGui::Text("Rotation: guwno");
+    //             // ImGui::DragFloat3("Rot", &it->second->rotation);
+    //         }
+    //     }
+    //     else
+    //     {
+    //         ImGui::TextDisabled("No object selected");
+    //     }
+    // }
+    // ImGui::EndChild();
+
     ImGui::End();
 }

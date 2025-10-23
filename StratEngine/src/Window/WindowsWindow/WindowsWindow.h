@@ -13,7 +13,8 @@ namespace StratEngine {
         ~WindowsWindow();
 
         virtual void SetWindowSize() override;
-        virtual void GetWindowSize() override;
+        virtual std::pair<float, float> GetWindowSize() override;
+        void SetMousePosition(float x, float y);
         void HideCursor(bool option);
         void SetEventCallback(std::function<void(Event& e)> callback);
 

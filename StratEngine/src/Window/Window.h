@@ -14,7 +14,7 @@ namespace StratEngine{
         public:
             virtual ~Window() = default;
             virtual void SetWindowSize() = 0;
-            virtual void GetWindowSize() = 0;
+            virtual std::pair<float, float> GetWindowSize() = 0;
         private:
     };
 }

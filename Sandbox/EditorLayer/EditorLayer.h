@@ -1,6 +1,14 @@
 #pragma once
 #include "StratEngine.h"
 
+struct EditorLayerInfo
+{
+    std::string SelectedEntity;
+    ImGuiID DockSpaceID;
+    bool ToolActive = true;
+    bool FirstLaunch = true;
+};
+
 class EditorLayer : public StratEngine::Layer {
     public:
         EditorLayer(StratEngine::Application* app);
@@ -8,7 +16,10 @@ class EditorLayer : public StratEngine::Layer {
         virtual void OnDetach() override;
     private:
         virtual void OnUpdate(float deltaTime) override;
-        virtual void OnEvent(StratEngine::Event& event) override;
+        virtual void OnEvent() override;
+        void NewFrame();
+        void EndFrame();
+        // ImGuiWindows
         void MainWindow();
         void Viewport();
         void EntityProperties();
@@ -19,6 +30,5 @@ class EditorLayer : public StratEngine::Layer {
     private:
         StratEngine::Application* m_App;
         ImGuiID m_DockSpaceID;
-        bool m_ToolActive = true;
-        bool m_FirstLaunch = true;
+        EditorLayerInfo m_EditorInfo;
 };
