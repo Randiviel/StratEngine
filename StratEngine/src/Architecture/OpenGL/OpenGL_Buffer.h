@@ -1,5 +1,5 @@
 #pragma once
-#include "Renderer/VertexBuffer.h"
+#include "Renderer/Buffer.h"
 
 namespace StratEngine 
 {
@@ -7,6 +7,7 @@ namespace StratEngine
     {
         public:
             OpenGL_Buffer(std::vector<float>& verticies, size_t size);
+            OpenGL_Buffer(std::vector<Vertex>& vertices);
             ~OpenGL_Buffer();
 
             virtual void Bind() override; 

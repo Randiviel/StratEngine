@@ -1,27 +1,28 @@
 #pragma once
-#include "Camera.h"
-#include "Model.h"
-#include "Renderer.h"
+#include "Renderer/Camera.h"
+#include "Renderer/Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
+#include "entt/entt.hpp"
 
 namespace StratEngine 
 {
+    class Entity;
+
     class Scene 
     {
         public:
             Scene(std::string name);
             ~Scene();
-            
-            void AddModel(Model& model);
             void AddCamera(Camera& camera);
             void Render(Renderer& renderer);
+            
             inline Camera& GetCamera() { return m_Camera; };
             inline std::string& GetName() { return m_Name; };
-            inline std::unordered_map<std::string, Model>& GetAllModels() { return m_Models; };
+            inline entt::registry& GetRegistry() { return m_Registry; };
+            Entity CreateEntity();
         private:
             std::string m_Name;
-            // TODO: Make Entitity Class and make it EntityContainer
-            std::unordered_map<std::string, Model> m_Models;
+            entt::registry m_Registry;
             Camera m_Camera;
     };
 

@@ -12,7 +12,7 @@ namespace StratEngine
             
             virtual void Bind() const override;
             virtual void Unbind() const override; 
-            virtual void BindShaderAttrib(const std::vector<ShaderAttributes>& attributes) override;
+            void BindShaderAttrib(const std::vector<ShaderAttributes>& attributes);
             void CalculateShaderAttrib();
             inline const unsigned int GetID() const { return m_VertexArrayID; };
         private:

@@ -9,8 +9,6 @@ namespace StratEngine {
 
             virtual void BeginScene(Camera& camera) {};
             virtual void EndScene() {};
-            virtual void RenderModel(Model& model) {};
-            virtual void SetShader(Shader& shader) {};
             virtual void* GetFrame() = 0;
         private:
 

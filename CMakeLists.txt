@@ -30,6 +30,7 @@ file(GLOB_RECURSE STRATENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Renderer/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Event/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Scene/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Architecture/OpenGL/*.cpp"
 )
 
@@ -62,7 +63,6 @@ target_include_directories(StratEngine
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/entt/src/
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor
-        ${CMAKE_CURRENT_SOURCE_DIR}
         )
 
 target_precompile_headers(StratEngine 

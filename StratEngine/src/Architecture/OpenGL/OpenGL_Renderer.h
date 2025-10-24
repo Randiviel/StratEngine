@@ -12,8 +12,7 @@ namespace StratEngine
 
             virtual void BeginScene(Camera& camera) override;
             virtual void EndScene() override;
-            virtual void RenderModel(Model& model) override;
-            virtual void SetShader(Shader& shader) override;
+            void SetShader(Shader& shader);
             void InitFrameBuffer();
             inline virtual void* GetFrame() override { return (void*)(intptr_t)m_Texture; } ;
             inline void SetEditorCamera(std::unique_ptr<Camera> camera) { m_EditorCamera = std::move(camera); };

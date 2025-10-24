@@ -150,20 +150,26 @@ void EditorLayer::EntityProperties()
 {
     float position[3] = {0.0f, 0.0f, 0.0f};
     float scale[3] = {1.0f, 1.0f, 1.0f};
-    auto& models = m_App->GetSceneManager()->GetCurrentScene()->GetAllModels();
-    auto it = models.find(m_EditorInfo.SelectedEntity);
-    if(it != models.end())
-    {
-        auto& modelPos = it->second.GetTransformComponent().GetPosition();
-        auto& modelScale = it->second.GetTransformComponent().GetScale();
-        position[0] = modelPos.x;
-        position[1] = modelPos.y;
-        position[2] = modelPos.z;
-        scale[0] = modelScale.x;
-        scale[1] = modelScale.y;
-        scale[2] = modelScale.z;
+    auto currentScene = m_App->GetSceneManager()->GetCurrentScene();
 
-    }
+        // if(currentScene != nullptr)
+        // {
+        //     auto& models = currentScene->GetAllModels();
+        //     auto it = models.find(m_EditorInfo.SelectedEntity);
+        //     if(it != models.end())
+        //     {
+        //         auto& modelPos = it->second.GetTransformComponent().GetPosition();
+        //         auto& modelScale = it->second.GetTransformComponent().GetScale();
+        //         position[0] = modelPos.x;
+        //         position[1] = modelPos.y;
+        //         position[2] = modelPos.z;
+        //         scale[0] = modelScale.x;
+        //         scale[1] = modelScale.y;
+        //         scale[2] = modelScale.z;
+
+        //     }
+        // }
+
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Properties", nullptr, flags);
 
@@ -181,11 +187,11 @@ void EditorLayer::EntityProperties()
         ImGui::DragFloat3("Rotation", rotation, 0.1f);
         ImGui::DragFloat3("Scale", scale, 0.1f);
 
-        if(it != models.end())
-        {
-            it->second.GetTransformComponent().SetPosition(glm::vec3(position[0], position[1], position[2]));
-            it->second.GetTransformComponent().SetScale(scale[0], scale[1], scale[2]);
-        }
+        // if(it != models.end())
+        // {
+        //     it->second.GetTransformComponent().SetPosition(glm::vec3(position[0], position[1], position[2]));
+        //     it->second.GetTransformComponent().SetScale(scale[0], scale[1], scale[2]);
+        // }
         
         ImGui::EndChild();
 
@@ -221,20 +227,20 @@ void EditorLayer::Objects()
     {
         if(ImGui::BeginTable("MyTable", 1, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         {
-            int row = 0;
-            for(auto& model : m_App->GetSceneManager()->GetCurrentScene()->GetAllModels())
-            {
-                ImGui::TableNextRow();
-                ImGui::TableSetColumnIndex(0);
+            // int row = 0;
+            // for(auto& model : m_App->GetSceneManager()->GetCurrentScene()->GetAllModels())
+            // {
+            //     ImGui::TableNextRow();
+            //     ImGui::TableSetColumnIndex(0);
                 
-                if(ImGui::Selectable(model.first.c_str(), selectedRow == row, 
-                                    ImGuiSelectableFlags_SpanAllColumns))
-                {
-                    selectedRow = row;
-                    m_EditorInfo.SelectedEntity = model.first; // Zapisz nazwę wybranego modelu
-                }
-                row++;
-            }
+            //     if(ImGui::Selectable(model.first.c_str(), selectedRow == row, 
+            //                         ImGuiSelectableFlags_SpanAllColumns))
+            //     {
+            //         selectedRow = row;
+            //         m_EditorInfo.SelectedEntity = model.first; // Zapisz nazwę wybranego modelu
+            //     }
+            //     row++;
+            // }
             ImGui::EndTable();
         }
     }

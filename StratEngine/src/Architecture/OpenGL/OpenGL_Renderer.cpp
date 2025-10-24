@@ -47,25 +47,25 @@ namespace StratEngine
         glBindVertexArray(0);
     }
 
-    void OpenGL_Renderer::RenderModel(Model& model)
-    {
-        auto& transform = model.GetTransformComponent();
-            for(auto & [name, mesh] : model.GetMeshes())
-            {
-                mesh.VAO.Bind();
+    // void OpenGL_Renderer::RenderModel(Model& model)
+    // {
+    //     auto& transform = model.GetTransformComponent();
+    //         for(auto & [name, mesh] : model.GetMeshes())
+    //         {
+    //             mesh.VAO.Bind();
                 
-                if(mesh.Texture != 0)
-                    glBindTexture(GL_TEXTURE_2D, mesh.Texture);
-                else
-                    glBindTexture(GL_TEXTURE_2D, m_DefaultTexture);
+    //             if(mesh.Texture != 0)
+    //                 glBindTexture(GL_TEXTURE_2D, mesh.Texture);
+    //             else
+    //                 glBindTexture(GL_TEXTURE_2D, m_DefaultTexture);
 
-                glm::mat4 matrixModel        = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-                matrixModel = glm::translate(matrixModel, transform.GetPosition());
-                matrixModel = glm::scale(matrixModel, transform.GetScale());
-                m_Shader->setMat4("model", matrixModel);
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-            }   
-    }
+    //             glm::mat4 matrixModel        = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    //             matrixModel = glm::translate(matrixModel, transform.GetPosition());
+    //             matrixModel = glm::scale(matrixModel, transform.GetScale());
+    //             m_Shader->setMat4("model", matrixModel);
+    //             glDrawArrays(GL_TRIANGLES, 0, 36);
+    //         }   
+    // }
 
     void OpenGL_Renderer::SetShader(Shader &shader)
     {

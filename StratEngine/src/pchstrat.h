@@ -23,20 +23,24 @@
 #include "Core/Logger.h"
 #include "Core/Input.h"
 
+#include "Scene/Entity.h"
+#include "Scene/Scene.h"
+#include "Scene/Components.h"
+
 #include "Event/EventDispatcher.h"
 #include "Event/KeyboardEvent.h"
 #include "Event/KeyCodes.h"
 #include "Event/Event.h"
 #include "Event/MouseEvent.h"
 
+#include "Renderer/GraphicsContext.h"
 #include "Renderer/Shader.h"
-#include "Renderer/VertexBuffer.h"
+#include "Renderer/Buffer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
-#include "Renderer/Model.h"
-#include "Renderer/Scene.h"
-#include "Renderer/Entity.h"
+
+
 
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Buffer.h"

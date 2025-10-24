@@ -1,4 +1,5 @@
 #include "pchstrat.h"
+#include "Scene.h"
 
 namespace StratEngine {
     Scene::Scene(std::string name) :
@@ -12,10 +13,6 @@ namespace StratEngine {
 
     }
 
-    void Scene::AddModel(Model& model)
-    {
-        m_Models.emplace(model.GetName(), std::move(model));
-    }
 
     void Scene::AddCamera(Camera& camera)
     {
@@ -24,23 +21,14 @@ namespace StratEngine {
 
     void Scene::Render(Renderer& renderer)
     {
-        if(m_Models.empty())
-        {
-            renderer.BeginScene(m_Camera);
-            renderer.EndScene();
-        }
-        else
-        {
-            renderer.BeginScene(m_Camera);
-                for(auto & [key, model] : m_Models)
-                {               
-                    renderer.RenderModel(model);
-                }       
-            renderer.EndScene();
-        }
-
+        
     }
 
+    Entity Scene::CreateEntity()
+    {
+        auto entity = m_Registry.create();
+        return Entity(entity, this);   
+    }
     SceneManager::SceneManager()
     {
 
@@ -55,7 +43,7 @@ namespace StratEngine {
     {
         if(m_Scenes.empty())
         {
-            std::cout << "SceneManager has no scenes!" << '\n';
+            // std::cout << "SceneManager has no scenes!" << '\n';
             return;
         }
 
@@ -70,7 +58,7 @@ namespace StratEngine {
     {
         if(m_Scenes.empty())
         {
-            std::cout << "SceneManager has no scenes!" << '\n';
+            // std::cout << "SceneManager has no scenes!" << '\n';
             return;
         }
 
@@ -91,7 +79,7 @@ namespace StratEngine {
     {
         if(m_Scenes.empty())
         {
-            std::cout << "SceneManager has no scenes!" << '\n';
+            // std::cout << "SceneManager has no scenes!" << '\n';
             return nullptr;
         }
 
