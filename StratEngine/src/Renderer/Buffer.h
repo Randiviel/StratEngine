@@ -12,6 +12,6 @@ namespace StratEngine {
             virtual inline void Bind() { }; 
             virtual inline void Unbind() { };
             
-            VertexBuffer* Create(std::vector<Vertex>& vertices);
+            static std::unique_ptr<VertexBuffer> Create(std::vector<Vertex>& vertices);
     };
 }

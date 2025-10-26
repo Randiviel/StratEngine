@@ -4,7 +4,7 @@
 #include "imgui/imgui_internal.h"
 
 EditorLayer::EditorLayer(StratEngine::Application* app)
-: m_App(app)
+: m_Engine(app)
 {
 
 }
@@ -21,7 +21,7 @@ void EditorLayer::OnAttach()
     io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\arial.ttf", 16.0f, NULL, 
                               io.Fonts->GetGlyphRangesDefault());
     // Setup Platform/Renderer backends
-    ImGui_ImplGlfw_InitForOpenGL(m_App->GetWindow()->GetWindowHandle(), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
+    ImGui_ImplGlfw_InitForOpenGL(m_Engine->GetWindow().GetWindowHandle(), true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
     ImGui_ImplOpenGL3_Init();
 
     ImGuiStyle& style = ImGui::GetStyle();
@@ -37,6 +37,59 @@ void EditorLayer::OnAttach()
     style.TabRounding = 2.5f;
     style.TabBorderSize = 0.0f;
     style.FramePadding = ImVec2(6.0f, 1.0f);
+
+    std::shared_ptr<StratEngine::Shader> myShader = std::make_shared<StratEngine::Shader>("Shaders/SandBoxShader.glsl");
+    m_Engine->GetRenderer().BindShader(myShader);
+
+        std::vector<float> vertices = {
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        };
+
+        m_Engine->GetSceneManager().CreateScene("myScene");
+        m_Engine->GetSceneManager().SetCurrentScene("myScene");
+        auto* myScene = m_Engine->GetSceneManager().GetCurrentScene();
+        auto myEntity = myScene->CreateEntity();
+        myEntity.AddComponent<StratEngine::MeshComponent>(vertices);
 }
 
 void EditorLayer::OnDetach()
@@ -46,13 +99,25 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
+    auto* currentScene = m_Engine->GetSceneManager().GetCurrentScene();
+    auto& renderer = m_Engine->GetRenderer();
+
+    renderer.BeginScene(currentScene->GetCamera());
+    for(auto& entity : currentScene->GetEntities())
+    {
+        auto& mesh = entity.GetComponent<StratEngine::MeshComponent>();
+        renderer.DrawMesh(mesh);    
+    }
+    renderer.EndScene();
+
     NewFrame();
     
     MainWindow();
     Viewport();
     EntityProperties();
     AssetManager();
-    Objects(); 
+    Objects();
+    
     
     EndFrame();
 }
@@ -78,7 +143,7 @@ void EditorLayer::EndFrame()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     ImGui::UpdatePlatformWindows();
     ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(m_App->GetWindow()->GetWindowHandle());    
+    glfwMakeContextCurrent(m_Engine->GetWindow().GetWindowHandle());    
 }
 
 void EditorLayer::MainWindow()
@@ -108,10 +173,10 @@ void EditorLayer::MainWindow()
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
             if (ImGui::MenuItem("Create Scene", "Ctrl+S")) { 
-                m_App->GetSceneManager()->CreateScene("Editor Scene"); 
+                m_Engine->GetSceneManager().CreateScene("Editor Scene"); 
             }
             if (ImGui::MenuItem("SetScene", "Ctrl+5")) { 
-                m_App->GetSceneManager()->SetCurrentScene("Editor Scene"); 
+                m_Engine->GetSceneManager().SetCurrentScene("Editor Scene"); 
             }
             if (ImGui::MenuItem("Close", "Ctrl+W")) { m_EditorInfo.ToolActive = false; }
             ImGui::EndMenu();
@@ -142,7 +207,7 @@ void EditorLayer::Viewport()
     ImGui::Begin("Viewport", nullptr, flags);
     ImGui::PopStyleVar();   
     ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-    ImGui::Image(m_App->GetRenderer().GetFrame(), viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+    ImGui::Image(m_Engine->GetRenderer().GetFrame(), viewportSize, ImVec2(0, 1), ImVec2(1, 0));
     ImGui::End();
 }
 
@@ -150,7 +215,7 @@ void EditorLayer::EntityProperties()
 {
     float position[3] = {0.0f, 0.0f, 0.0f};
     float scale[3] = {1.0f, 1.0f, 1.0f};
-    auto currentScene = m_App->GetSceneManager()->GetCurrentScene();
+    auto currentScene = m_Engine->GetSceneManager().GetCurrentScene();
 
         // if(currentScene != nullptr)
         // {

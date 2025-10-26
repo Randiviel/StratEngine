@@ -1,5 +1,4 @@
 #include "pchstrat.h"
-#include "OpenGL_Renderer.h"
 #include "StratConfig.h"
 
 namespace StratEngine 
@@ -21,7 +20,7 @@ namespace StratEngine
 
     OpenGL_Renderer::~OpenGL_Renderer()
     {
-        std::cout << "Destroying OpenGL_Renderer" << std::endl;
+        STRAT_CORE_WARN("Destroying OpenGL_Renderer!");
     }
 
     void OpenGL_Renderer::BeginScene(Camera& camera)
@@ -32,11 +31,7 @@ namespace StratEngine
             glEnable(GL_DEPTH_TEST);
 
             glUseProgram(m_Shader->GetShader());
-        if(m_EditorCamera == nullptr)
             m_Shader->CalculateMartix(camera);
-        else
-            m_Shader->CalculateMartix(*m_EditorCamera);
-
     }
 
     void OpenGL_Renderer::EndScene()
@@ -47,29 +42,17 @@ namespace StratEngine
         glBindVertexArray(0);
     }
 
-    // void OpenGL_Renderer::RenderModel(Model& model)
-    // {
-    //     auto& transform = model.GetTransformComponent();
-    //         for(auto & [name, mesh] : model.GetMeshes())
-    //         {
-    //             mesh.VAO.Bind();
-                
-    //             if(mesh.Texture != 0)
-    //                 glBindTexture(GL_TEXTURE_2D, mesh.Texture);
-    //             else
-    //                 glBindTexture(GL_TEXTURE_2D, m_DefaultTexture);
-
-    //             glm::mat4 matrixModel        = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    //             matrixModel = glm::translate(matrixModel, transform.GetPosition());
-    //             matrixModel = glm::scale(matrixModel, transform.GetScale());
-    //             m_Shader->setMat4("model", matrixModel);
-    //             glDrawArrays(GL_TRIANGLES, 0, 36);
-    //         }   
-    // }
-
-    void OpenGL_Renderer::SetShader(Shader &shader)
+    void OpenGL_Renderer::BindShader(std::shared_ptr<Shader> shader)
     {
-        m_Shader = &shader;
+        m_Shader = shader;
+    }
+
+    void OpenGL_Renderer::DrawMesh(MeshComponent& mesh)
+    {
+            mesh.VAO->Bind();
+            glm::mat4 matrixModel = glm::mat4(1.0f);
+            m_Shader->setMat4("model", matrixModel);
+            glDrawArrays(GL_TRIANGLES, 0, mesh.Vertices.size());
     }
 
     void OpenGL_Renderer::InitFrameBuffer()
@@ -77,7 +60,7 @@ namespace StratEngine
     // Stwórz teksturę
     glGenTextures(1, &m_Texture);
     glBindTexture(GL_TEXTURE_2D, m_Texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, StratConfig::WINDOW_HEIGHT, StratConfig::WINDOW_WIDTH, 
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, StratConfig::WINDOW_WIDTH, StratConfig::WINDOW_HEIGHT, 
                  0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -92,7 +75,7 @@ namespace StratEngine
     glGenRenderbuffers(1, &m_RBO);
     glBindRenderbuffer(GL_RENDERBUFFER, m_RBO);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 
-                          StratConfig::WINDOW_HEIGHT, StratConfig::WINDOW_WIDTH);
+                          StratConfig::WINDOW_WIDTH, StratConfig::WINDOW_HEIGHT);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, 
                               GL_RENDERBUFFER, m_RBO);
     

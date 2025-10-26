@@ -6,7 +6,6 @@ namespace StratEngine
     class OpenGL_Buffer : public VertexBuffer 
     {
         public:
-            OpenGL_Buffer(std::vector<float>& verticies, size_t size);
             OpenGL_Buffer(std::vector<Vertex>& vertices);
             ~OpenGL_Buffer();
 

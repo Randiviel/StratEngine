@@ -7,7 +7,7 @@ namespace StratEngine{
     
     struct WindowProp{
         const char* name;
-        int height, width;
+        int width, height;
     };
 
     class Window {

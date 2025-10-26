@@ -10,5 +10,8 @@ namespace StratEngine {
 
             virtual void Bind() const {};
             virtual void Unbind() const {}; 
+            virtual void SetVertexLayout(const std::vector<ShaderAttributes>& attributes) {};
+
+            static std::unique_ptr<VertexArray> Create();
     };
 }

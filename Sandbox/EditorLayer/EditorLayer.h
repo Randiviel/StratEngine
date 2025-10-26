@@ -28,7 +28,7 @@ class EditorLayer : public StratEngine::Layer {
         void Objects();
 
     private:
-        StratEngine::Application* m_App;
+        StratEngine::Application* m_Engine;
         ImGuiID m_DockSpaceID;
         EditorLayerInfo m_EditorInfo;
 };

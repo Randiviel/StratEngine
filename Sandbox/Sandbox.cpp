@@ -7,6 +7,6 @@ StratEngine::Application* StratEngine::CreateApplication(){
     Application* app = new Application();
     EditorLayer* editor = new EditorLayer(app);
     editor->OnAttach();
-    app->GetLayerStack()->PushLayer(editor);
+    app->GetLayerStack().PushLayer(editor);
     return app;
 }

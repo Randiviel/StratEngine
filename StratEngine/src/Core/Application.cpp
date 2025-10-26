@@ -9,10 +9,10 @@ namespace StratEngine{
         
         if(GraphicsContext::GetAPI() == GraphicsAPI::OpenGL)
         {
-            m_Window = std::make_unique<WindowsWindow>(WindowProp{StratConfig::WINDOW_TITLE, StratConfig::WINDOW_HEIGHT, StratConfig::WINDOW_WIDTH});
+            m_Window = std::make_unique<WindowsWindow>(WindowProp{StratConfig::WINDOW_TITLE, StratConfig::WINDOW_WIDTH, StratConfig::WINDOW_HEIGHT});
             m_Window->SetEventCallback([this](Event& e) {OnEvent(e);});
             m_Window->HideCursor(false);
-            m_Renderer = std::make_unique<OpenGL_Renderer>();
+            m_Renderer.reset(Renderer::Create());
         }
         else
         {
@@ -27,76 +27,6 @@ namespace StratEngine{
 
     void Application::Run()
     {
-        std::vector<float> vertices = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-        };
-
-        // std::vector<ShaderAttributes> layout = {
-        //     {"a_Position", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
-        //     {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false}
-        // };
-        // Shader myShader("Shaders/SandBoxShader.glsl");
-        // m_Renderer->SetShader(myShader);
-        // auto& myScene = m_SceneManager.CreateScene("myScene");
-        // m_SceneManager.SetCurrentScene("myScene");
-        // Mesh mesh("MyCube", vertices, layout, "Textures/Container.jpg");
-        // Mesh mesh2("MyCube", vertices, layout);
-        // Model model("MyModel");
-        // Model model2("MySecondModel");
-        // model2.GetTransformComponent().SetPosition(glm::vec3(2.0f, 2.0f, 2.0f));
-        // model.AddMesh(mesh);
-        // model2.AddMesh(mesh2);
-        // myScene.AddModel(model);
-        // myScene.AddModel(model2);
-
-        // auto entity = myScene.CreateEntity();
-        // auto& transform = entity.AddComponent<TransformComponent>();
-        // transform.SetPosition(glm::vec3(1.0f, 1.5f, 2.0f));
-        // auto& pos = transform.GetPosition();
-        // STRAT_CORE_TRACE("The position of entity is: {0}, {1}, {2}",  pos.x, pos.y, pos.z);
-
-        // STRAT_CORE_TRACE("Entity ID: {0}", entity.GetName());
-
         while (isRunning())
         {
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -199,17 +129,3 @@ namespace StratEngine{
             m_LastFrame = currentFrame;  
     }
 }
-
-            // if(StratEngine::KeyCodeToString(e.GetKey()) == "Left Alt")
-            // {
-            //     if(m_MouseLock)
-            //     {
-            //         m_MouseLock = false;
-            //         m_Window->HideCursor(false);
-            //     }
-            //     else
-            //     {
-            //         m_MouseLock = true;
-            //         m_Window->HideCursor(true);
-            //     }
-            // }

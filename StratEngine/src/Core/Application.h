@@ -14,14 +14,14 @@ namespace StratEngine {
 
             void Run();
             void OnEvent(Event& e);
-            inline WindowsWindow* GetWindow() { return m_Window.get(); } ;
-            inline LayerStack* GetLayerStack() { return &m_LayerStack; } ;  
+            inline WindowsWindow& GetWindow() { return *m_Window; } ;
+            inline LayerStack& GetLayerStack() { return m_LayerStack; } ;  
             inline Renderer& GetRenderer() { return *m_Renderer; } ;
-            inline SceneManager* GetSceneManager() { return &m_SceneManager; };
+            inline SceneManager& GetSceneManager() { return m_SceneManager; };
         private:
             std::unique_ptr<WindowsWindow> m_Window;
-            LayerStack m_LayerStack;
             std::unique_ptr<Renderer> m_Renderer;
+            LayerStack m_LayerStack;
             SceneManager m_SceneManager;
             float m_DeltaTime;
             float m_LastFrame = 0.0f;

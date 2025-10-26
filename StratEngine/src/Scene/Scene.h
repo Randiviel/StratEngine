@@ -19,10 +19,12 @@ namespace StratEngine
             inline Camera& GetCamera() { return m_Camera; };
             inline std::string& GetName() { return m_Name; };
             inline entt::registry& GetRegistry() { return m_Registry; };
+            inline std::vector<Entity>& GetEntities() {return m_Entities; };
             Entity CreateEntity();
         private:
             std::string m_Name;
             entt::registry m_Registry;
+            std::vector<Entity> m_Entities;
             Camera m_Camera;
     };
 

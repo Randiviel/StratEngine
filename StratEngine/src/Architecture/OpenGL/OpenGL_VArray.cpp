@@ -22,7 +22,7 @@ namespace StratEngine
         glBindVertexArray(0);
     }
 
-    void OpenGL_VArray::BindShaderAttrib(const std::vector<ShaderAttributes>& attributes)
+    void OpenGL_VArray::SetVertexLayout(const std::vector<ShaderAttributes>& attributes)
     {
         m_ShaderAttributes = attributes;
         CalculateShaderAttrib();
@@ -36,7 +36,7 @@ namespace StratEngine
 
         for(const auto i : m_ShaderAttributes)
         {
-            stride+= i.Count * sizeof(float);
+            stride+= i.Size;
         }
 
         for(const auto i : m_ShaderAttributes)
@@ -44,7 +44,7 @@ namespace StratEngine
             glVertexAttribPointer(attribCount, i.Count, i.GetGLenumType(i.Type), i.Normalized, stride, reinterpret_cast<const void*>(attribOffset));
             glEnableVertexAttribArray(attribCount);
             attribCount++;
-            attribOffset+=i.Count * sizeof(float);
+            attribOffset+=i.Size;
         }
     }
 }

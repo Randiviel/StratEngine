@@ -27,6 +27,7 @@ namespace StratEngine {
     Entity Scene::CreateEntity()
     {
         auto entity = m_Registry.create();
+        m_Entities.emplace(m_Entities.end(), Entity(entity, this));
         return Entity(entity, this);   
     }
     SceneManager::SceneManager()

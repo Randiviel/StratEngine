@@ -4,6 +4,8 @@
 #include "Core/Application.h"
 #include "Core/Input.h"
 #include "Core/Logger.h"
+#include "Scene/Components.h"
+#include "Scene/Entity.h"
 
 #include "Event/KeyCodes.h"
 

@@ -18,8 +18,11 @@ namespace StratEngine
     struct MeshComponent
     {   
         std::string Name;
-        std::vector<Vertex> Vertcies;
+        std::vector<Vertex> Vertices;
+        std::unique_ptr<VertexArray> VAO;
+        std::unique_ptr<VertexBuffer> VBO;
         // I don't know for now -> uint32_t Texture = 0;
+        MeshComponent(std::vector<float>& vertices);
     };
 
     struct TagComponent

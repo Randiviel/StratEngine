@@ -11,7 +11,7 @@ namespace StratEngine {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         // glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         
-        m_WindowHandle = glfwCreateWindow(prop.height, prop.width, prop.name, NULL, NULL);
+        m_WindowHandle = glfwCreateWindow(prop.width, prop.height, prop.name, NULL, NULL);
         if (!m_WindowHandle)
         {
             glfwTerminate();

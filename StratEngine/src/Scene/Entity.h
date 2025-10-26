@@ -29,6 +29,8 @@ namespace StratEngine
                 m_Scene->GetRegistry().remove<T>(m_EntityID);
             }
 
+            inline entt::entity GetID() const { return m_EntityID; };
+
         private:
             entt::entity m_EntityID;
             Scene* m_Scene;
