@@ -15,6 +15,9 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "stb_image.h"
 #include "entt/entt.hpp"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 #include "Window/Window.h"
 #include "Window/WindowsWindow/WindowsWindow.h"
@@ -39,8 +42,6 @@
 #include "Renderer/VertexArray.h"
 #include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
-
-
 
 #include "Architecture/OpenGL/OpenGL_Renderer.h"
 #include "Architecture/OpenGL/OpenGL_Buffer.h"

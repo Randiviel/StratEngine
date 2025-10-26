@@ -6,6 +6,9 @@
 #include "Core/Logger.h"
 #include "Scene/Components.h"
 #include "Scene/Entity.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postprocess.h"
 
 #include "Event/KeyCodes.h"
 

@@ -28,8 +28,15 @@ out vec4 FragColor;
 
 void main()
 {
-        // FragColor = texture(Texture, TexCoord);
-        FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        vec4 texColor = texture(Texture, TexCoord);
+        
+        // ✅ Opcjonalnie: przyciemnij tylną stronę
+        if(!gl_FrontFacing)
+        {
+            texColor *= 0.7;  // Ciemniejsza od tyłu
+        }
+        
+        FragColor = texColor;
 }
 
 #endif

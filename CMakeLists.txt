@@ -12,6 +12,7 @@ add_subdirectory(vendor/glm)
 add_subdirectory(vendor/stb_image)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/entt)
+add_subdirectory(vendor/assimp)
 #-------------------------------------------
 add_library(Glad_lib
     STATIC
@@ -49,6 +50,7 @@ target_link_libraries(StratEngine
         stb_image
         spdlog
         EnTT
+        assimp
         )
 
 target_include_directories(StratEngine 
@@ -62,6 +64,7 @@ target_include_directories(StratEngine
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/stb_image
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/spdlog/include
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor/entt/src/
+        ${CMAKE_CURRENT_SOURCE_DIR}/vendor/assimp/include
         ${CMAKE_CURRENT_SOURCE_DIR}/vendor
         )
 

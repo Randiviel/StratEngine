@@ -29,6 +29,10 @@ namespace StratEngine
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
+            glEnable(GL_CULL_FACE);
+
+            glCullFace(GL_BACK);       // Ukryj tylne ściany
+            glFrontFace(GL_CCW);       // Przednie ściany = counter-clockwise
 
             glUseProgram(m_Shader->GetShader());
             m_Shader->CalculateMartix(camera);
@@ -49,10 +53,12 @@ namespace StratEngine
 
     void OpenGL_Renderer::DrawMesh(MeshComponent& mesh)
     {
-            mesh.VAO->Bind();
-            glm::mat4 matrixModel = glm::mat4(1.0f);
-            m_Shader->setMat4("model", matrixModel);
-            glDrawArrays(GL_TRIANGLES, 0, mesh.Vertices.size());
+        mesh.VAO->Bind();
+        glBindTexture(GL_TEXTURE_2D, mesh.Texture);
+        glm::mat4 matrixModel = glm::mat4(1.0f);
+        matrixModel = glm::scale(matrixModel, glm::vec3(0.01f, 0.01f, 0.01f));
+        m_Shader->setMat4("model", matrixModel);
+        glDrawArrays(GL_TRIANGLES, 0, mesh.Vertices.size());
     }
 
     void OpenGL_Renderer::InitFrameBuffer()

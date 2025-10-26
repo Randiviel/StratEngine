@@ -26,7 +26,7 @@ namespace StratEngine{
     }
 
     void Application::Run()
-    {
+    {   
         while (isRunning())
         {
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

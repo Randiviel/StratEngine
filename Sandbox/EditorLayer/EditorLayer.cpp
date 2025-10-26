@@ -88,8 +88,36 @@ void EditorLayer::OnAttach()
         m_Engine->GetSceneManager().CreateScene("myScene");
         m_Engine->GetSceneManager().SetCurrentScene("myScene");
         auto* myScene = m_Engine->GetSceneManager().GetCurrentScene();
-        auto myEntity = myScene->CreateEntity();
-        myEntity.AddComponent<StratEngine::MeshComponent>(vertices);
+        // auto myEntity = myScene->CreateEntity();
+        // myEntity.AddComponent<StratEngine::MeshComponent>(vertices);
+
+        Assimp::Importer importer;
+
+        const aiScene* scene = importer.ReadFile("Assets/Container.FBX", 
+                aiProcess_Triangulate |      // ✅ Konwertuj na trójkąty
+                aiProcess_FlipUVs |          // ✅ Odwróć UV dla OpenGL
+                aiProcess_GenNormals |       // Opcjonalnie
+                aiProcess_CalcTangentSpace);
+                
+        for(int i = 0; i < scene->mNumMeshes; i++)
+        {
+            aiMesh* mesh = scene->mMeshes[i];
+            std::vector<float> vertices;
+
+            for(unsigned int v = 0; v < mesh->mNumVertices; v++)
+            {
+                vertices.push_back(mesh->mVertices[v].x);
+                vertices.push_back(mesh->mVertices[v].y);
+                vertices.push_back(mesh->mVertices[v].z);
+                vertices.push_back(mesh->mTextureCoords[0][v].x);
+                vertices.push_back(mesh->mTextureCoords[0][v].y);
+            }
+            
+            auto Entity = myScene->CreateEntity();
+            Entity.AddComponent<StratEngine::MeshComponent>(vertices);
+            auto& meshComp = Entity.GetComponent<StratEngine::MeshComponent>();
+            meshComp.AddTexture("Textures/Container_DiffuseMap.jpg");
+        }
 }
 
 void EditorLayer::OnDetach()
@@ -101,11 +129,12 @@ void EditorLayer::OnUpdate(float deltaTime)
 {
     auto* currentScene = m_Engine->GetSceneManager().GetCurrentScene();
     auto& renderer = m_Engine->GetRenderer();
+    auto view = currentScene->GetRegistry().view<StratEngine::MeshComponent>();
 
     renderer.BeginScene(currentScene->GetCamera());
-    for(auto& entity : currentScene->GetEntities())
+    for(auto& entity : view)
     {
-        auto& mesh = entity.GetComponent<StratEngine::MeshComponent>();
+        auto& mesh = currentScene->GetRegistry().get<StratEngine::MeshComponent>(entity);
         renderer.DrawMesh(mesh);    
     }
     renderer.EndScene();
