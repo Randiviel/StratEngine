@@ -4,11 +4,11 @@
 #include "Core/Application.h"
 #include "Core/Input.h"
 #include "Core/Logger.h"
+#include "Core/Input.h"
+#include "Renderer/Camera.h"
+#include "Event/KeyCodes.h"
 #include "Scene/Components.h"
 #include "Scene/Entity.h"
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
 
 #include "Event/KeyCodes.h"
 

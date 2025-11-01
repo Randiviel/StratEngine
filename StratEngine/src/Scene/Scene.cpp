@@ -24,11 +24,19 @@ namespace StratEngine {
         
     }
 
-    Entity Scene::CreateEntity()
+    Entity Scene::CreateEntity(std::string name)
     {
+        std::string newName = name;
+        int counter = 1;
+        
+        while(m_Entities.contains(newName))
+        {
+            newName = name + std::to_string(counter);
+            counter++;
+        }
         auto entity = m_Registry.create();
-        m_Entities.emplace(m_Entities.end(), Entity(entity, this));
-        return Entity(entity, this);   
+        m_Entities.emplace(newName, Entity(entity, this, newName));
+        return Entity(entity, this, newName);   
     }
     SceneManager::SceneManager()
     {

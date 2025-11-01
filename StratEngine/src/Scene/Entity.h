@@ -8,7 +8,7 @@ namespace StratEngine
 
     class Entity {
         public:
-            Entity(entt::entity entity, Scene* scene);
+            Entity(entt::entity entity, Scene* scene, std::string name = "Default");
             ~Entity();
 
             template <typename T>
@@ -18,9 +18,10 @@ namespace StratEngine
             }
 
             template <typename T, typename... Args>
-            T& AddComponent(Args&&... args)
-            {
-                return m_Scene->GetRegistry().emplace<T>(m_EntityID, std::forward<Args>(args)...);
+            Entity& AddComponent(Args&&... args)
+            {   
+                m_Scene->GetRegistry().emplace<T>(m_EntityID, std::forward<Args>(args)...);
+                return *this;
             }
 
             template <typename T>
@@ -31,7 +32,16 @@ namespace StratEngine
 
             inline entt::entity GetID() const { return m_EntityID; };
 
+            inline std::string& GetName() { return m_Name; };
+
+            template <typename T>
+            bool HasComponent()
+            {
+                return m_Scene->GetRegistry().all_of<T>(m_EntityID);
+            }
+
         private:
+            std::string m_Name;
             entt::entity m_EntityID;
             Scene* m_Scene;
     };

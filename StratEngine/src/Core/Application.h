@@ -18,6 +18,7 @@ namespace StratEngine {
             inline LayerStack& GetLayerStack() { return m_LayerStack; } ;  
             inline Renderer& GetRenderer() { return *m_Renderer; } ;
             inline SceneManager& GetSceneManager() { return m_SceneManager; };
+            inline bool IsMouseLocked() { return m_MouseLock; };
         private:
             std::unique_ptr<WindowsWindow> m_Window;
             std::unique_ptr<Renderer> m_Renderer;

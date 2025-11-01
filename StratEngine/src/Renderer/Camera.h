@@ -22,6 +22,8 @@ namespace StratEngine
             void ProcessMouseMovement(float xPos, float yPos);
             glm::mat4 GetViewMatrix();
             inline void ResetFirstTime() { m_firstTime = true; };
+            inline glm::vec3& GetPosition() { return m_Position; };
+            inline glm::vec3& GetDirection() { return m_Front; };
         private:
             glm::vec3 m_Position;
             glm::vec3 m_Front;

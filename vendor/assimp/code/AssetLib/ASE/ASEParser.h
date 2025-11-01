@@ -64,7 +64,7 @@ using namespace D3DS;
 
 // ---------------------------------------------------------------------------
 /** Helper structure representing an ASE material */
-struct Material final : D3DS::Material {
+struct Material : public D3DS::Material {
     //! Default constructor has been deleted
     Material() = delete;
 
@@ -115,7 +115,7 @@ struct Material final : D3DS::Material {
         return *this;
     }
 
-    ~Material() override = default;
+    ~Material() = default;
 
     //! Contains all sub materials of this material
     std::vector<Material> avSubMaterials;

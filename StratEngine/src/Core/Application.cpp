@@ -83,13 +83,13 @@ namespace StratEngine{
         });
 
         Dispatcher.Dispatch<MousePressedEvent>([this](MousePressedEvent& e){
-            Input::UpdateKeyState(e.GetMouseButton(), true);
+            Input::UpdateMouseButtonState(e.GetMouseButton(), true);
         });
 
         Dispatcher.Dispatch<MouseReleasedEvent>([this](MouseReleasedEvent& e){
-            Input::UpdateKeyState(e.GetMouseButton(), false);
+            Input::UpdateMouseButtonState(e.GetMouseButton(), false);
         });
-        
+
         if(!m_MouseLock)
         {
             for(auto& layer : m_LayerStack)

@@ -20,7 +20,6 @@ namespace StratEngine
     {
         if(button < 0 | button >= MAX_MOUSE_BUTTONS)
             return false;
-
         return s_MouseButtons[button];
     }
 
@@ -39,7 +38,7 @@ namespace StratEngine
 
     void Input::UpdateMouseButtonState(int button, bool pressed)
     {
-        if(button < 0 | button >= MAX_KEYS)
+        if(button < 0 | button > MAX_KEYS)
             return;
         s_MouseButtons[button] = pressed;
     }

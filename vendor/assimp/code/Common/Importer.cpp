@@ -88,6 +88,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef ASSIMP_BUILD_NO_VALIDATEDS_PROCESS
 #   include "PostProcessing/ValidateDataStructure.h"
+#include "Importer.h"
 #endif
 
 using namespace Assimp::Profiling;
@@ -733,7 +734,7 @@ const aiScene* Importer::ReadFile( const char* _pFile, unsigned int pFlags) {
                     return nullptr;
                 }
             }
-#endif // ASSIMP_BUILD_NO_VALIDATEDS_PROCESS
+#endif // no validation
 
             // Preprocess the scene and prepare it for post-processing
             if (profiler) {

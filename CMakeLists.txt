@@ -33,6 +33,7 @@ file(GLOB_RECURSE STRATENGINE_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Window/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Scene/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Architecture/OpenGL/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/src/Physics/*.cpp"
 )
 
 add_library(StratEngine 
@@ -50,7 +51,6 @@ target_link_libraries(StratEngine
         stb_image
         spdlog
         EnTT
-        assimp
         )
 
 target_include_directories(StratEngine 
@@ -75,13 +75,21 @@ target_precompile_headers(StratEngine
 #-------------------------------------------
 
 add_executable(MyApp Sandbox/Sandbox.cpp)
-target_sources(MyApp PUBLIC Sandbox/EditorLayer/EditorLayer.cpp)
+target_sources(MyApp 
+PUBLIC 
+Sandbox/EditorLayer/EditorLayer.cpp
+Sandbox/EditorLayer/EditorImporter.cpp)
+
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/Shaders DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/build/bin)
 
-target_link_libraries(MyApp PRIVATE StratEngine)
+target_link_libraries(MyApp 
+    PRIVATE 
+        StratEngine
+        assimp)
 
 target_include_directories(MyApp PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/vendor/imgui)
+    ${CMAKE_CURRENT_SOURCE_DIR}/StratEngine/vendor/imgui
+    ${CMAKE_CURRENT_SOURCE_DIR}/Sandbox)
 
 
 #-------------------------------------------

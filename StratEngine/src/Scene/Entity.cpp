@@ -3,8 +3,8 @@
 
 namespace StratEngine
 {
-    Entity::Entity(entt::entity entity, Scene* scene)
-    :  m_EntityID(entity), m_Scene(scene)
+    Entity::Entity(entt::entity entity, Scene* scene, std::string name)
+    :  m_EntityID(entity), m_Scene(scene), m_Name(name)
     {
 
     }

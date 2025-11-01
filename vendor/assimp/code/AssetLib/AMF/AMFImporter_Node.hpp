@@ -107,7 +107,7 @@ protected:
 }; // class IAMFImporter_NodeElement
 
 /// A collection of objects or constellations with specific relative locations.
-struct AMFConstellation final : public AMFNodeElementBase {
+struct AMFConstellation : public AMFNodeElementBase {
 	/// Constructor.
 	/// \param [in] pParent - pointer to parent node.
 	AMFConstellation(AMFNodeElementBase *pParent) :
@@ -116,7 +116,7 @@ struct AMFConstellation final : public AMFNodeElementBase {
 }; // struct CAMFImporter_NodeElement_Constellation
 
 /// Part of constellation.
-struct AMFInstance final : public AMFNodeElementBase {
+struct AMFInstance : public AMFNodeElementBase {
 
 	std::string ObjectID; ///< ID of object for instantiation.
 	/// \var Delta - The distance of translation in the x, y, or z direction, respectively, in the referenced object's coordinate system, to

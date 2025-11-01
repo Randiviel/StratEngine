@@ -103,14 +103,18 @@ namespace StratEngine {
     }
     void WindowsWindow::mousebutton_callback(GLFWwindow *window, int button, int action, int mods)
     {
+        WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
+
         switch(action){
             case GLFW_PRESS: {
-                WindowsWindow* windowInstance = static_cast<WindowsWindow*>(glfwGetWindowUserPointer(window));
+
                 MousePressedEvent event(button);
                 windowInstance->m_EventCallback(event);
                 break;
             }
             case GLFW_RELEASE: {
+                MouseReleasedEvent event(button);
+                windowInstance->m_EventCallback(event);
                 break;
             }
         }
