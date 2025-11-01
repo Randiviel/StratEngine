@@ -3,24 +3,28 @@
 
 namespace StratEngine
 {
-    MeshComponent::MeshComponent(std::vector<float>& vertices)
+    MeshComponent::MeshComponent(const std::vector<float>& vertices)
     {
-        for(int i = 0; i < vertices.size(); i+= 5)
-        {
-            Vertex vertex;
-            vertex.Position.x = vertices[i];
-            vertex.Position.y = vertices[i+1];
-            vertex.Position.z = vertices[i+2];
-            vertex.TextureCoordinates.x = vertices[i+3];
-            vertex.TextureCoordinates.y = vertices[i+4];
-            Vertices.push_back(vertex);
-        }
+            for(int i = 0; i < vertices.size(); i+= 8)
+            {
+                Vertex vertex;
+                vertex.Position.x = vertices[i];
+                vertex.Position.y = vertices[i+1];
+                vertex.Position.z = vertices[i+2];
+                vertex.Normal.x = vertices[i+3];
+                vertex.Normal.y = vertices[i+4];
+                vertex.Normal.z = vertices[i+5];
+                vertex.TextureCoordinates.x = vertices[i+6];
+                vertex.TextureCoordinates.y = vertices[i+7];
+                Vertices.push_back(vertex);
+            }
 
         std::vector<ShaderAttributes> layout = 
         {
-        {"a_Color", ShaderAttribTypes::Float4, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float4), 4, false},
         {"a_Position", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
+        {"a_Normal", ShaderAttribTypes::Float3, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float3), 3, false},
         {"a_Texture", ShaderAttribTypes::Float2, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float2), 2, false},
+        {"a_Color", ShaderAttribTypes::Float4, ShaderAttributes::GetSizeOfType(ShaderAttribTypes::Float4), 4, false}
         };
 
         VAO = VertexArray::Create(); 
@@ -49,7 +53,8 @@ namespace StratEngine
         unsigned char *data = stbi_load(filePath, &width, &height, &nrChannels, 0);
         if (data)
         {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         else
@@ -58,5 +63,14 @@ namespace StratEngine
         }
         stbi_image_free(data);
     }
+    glm::mat4 TransformComponent::GetModelMatrix()
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, Position);
+        model = glm::rotate(model, glm::radians(Rotation.x), glm::vec3(1, 0, 0));
+        model = glm::rotate(model, glm::radians(Rotation.y), glm::vec3(0, 1, 0));
+        model = glm::rotate(model, glm::radians(Rotation.z), glm::vec3(0, 0, 1));
+        model = glm::scale(model, Scale);
+        return model;
+    }
 }
-

@@ -1,7 +1,9 @@
-#include "StratConfig.h"
 #include "EditorLayer.h"
+#include "StratConfig.h"
 #include "glfw3.h"
 #include "imgui/imgui_internal.h"
+#include "EditorImporter.h"
+#include "Vendor/Include/portable-file-dialogs.h"
 
 EditorLayer::EditorLayer(StratEngine::Application* app)
 : m_Engine(app)
@@ -42,82 +44,65 @@ void EditorLayer::OnAttach()
     m_Engine->GetRenderer().BindShader(myShader);
 
         std::vector<float> vertices = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
 
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f, 0.0f, 0.0f,
 
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
 
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
 
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
 
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f
         };
 
         m_Engine->GetSceneManager().CreateScene("myScene");
         m_Engine->GetSceneManager().SetCurrentScene("myScene");
         auto* myScene = m_Engine->GetSceneManager().GetCurrentScene();
-        // auto myEntity = myScene->CreateEntity();
-        // myEntity.AddComponent<StratEngine::MeshComponent>(vertices);
+        auto& myEntity = myScene->CreateEntity("Cube")
+                    .AddComponent<StratEngine::MeshComponent>(vertices)
+                    .AddComponent<StratEngine::TransformComponent>(glm::vec3(5.0f, 0.0f, 0.0f));
 
-        Assimp::Importer importer;
+        Editor::Importer::ImportObject(myScene, "Assets/Container.FBX");
+        
+        auto& light = myScene->CreateEntity("Light")
+                    .AddComponent<StratEngine::MeshComponent>(vertices)
+                    .AddComponent<StratEngine::TransformComponent>()
+                    .AddComponent<StratEngine::LightComponent>();
 
-        const aiScene* scene = importer.ReadFile("Assets/Container.FBX", 
-                aiProcess_Triangulate |      // ✅ Konwertuj na trójkąty
-                aiProcess_FlipUVs |          // ✅ Odwróć UV dla OpenGL
-                aiProcess_GenNormals |       // Opcjonalnie
-                aiProcess_CalcTangentSpace);
-                
-        for(int i = 0; i < scene->mNumMeshes; i++)
-        {
-            aiMesh* mesh = scene->mMeshes[i];
-            std::vector<float> vertices;
+        m_Engine->GetRenderer().Submit(myScene);
 
-            for(unsigned int v = 0; v < mesh->mNumVertices; v++)
-            {
-                vertices.push_back(mesh->mVertices[v].x);
-                vertices.push_back(mesh->mVertices[v].y);
-                vertices.push_back(mesh->mVertices[v].z);
-                vertices.push_back(mesh->mTextureCoords[0][v].x);
-                vertices.push_back(mesh->mTextureCoords[0][v].y);
-            }
-            
-            auto Entity = myScene->CreateEntity();
-            Entity.AddComponent<StratEngine::MeshComponent>(vertices);
-            auto& meshComp = Entity.GetComponent<StratEngine::MeshComponent>();
-            meshComp.AddTexture("Textures/Container_DiffuseMap.jpg");
-        }
 }
 
 void EditorLayer::OnDetach()
@@ -127,16 +112,20 @@ void EditorLayer::OnDetach()
 
 void EditorLayer::OnUpdate(float deltaTime)
 {
+    static bool onlyOnce = true;
+    CameraInput(deltaTime);
     auto* currentScene = m_Engine->GetSceneManager().GetCurrentScene();
     auto& renderer = m_Engine->GetRenderer();
     auto view = currentScene->GetRegistry().view<StratEngine::MeshComponent>();
 
-    renderer.BeginScene(currentScene->GetCamera());
-    for(auto& entity : view)
-    {
-        auto& mesh = currentScene->GetRegistry().get<StratEngine::MeshComponent>(entity);
-        renderer.DrawMesh(mesh);    
-    }
+    renderer.BeginScene(m_EditorCamera);
+
+        for(auto& entity : view)
+        {
+            StratEngine::Entity tempEntity(entity, currentScene);
+            renderer.DrawMesh(tempEntity);
+        }
+
     renderer.EndScene();
 
     NewFrame();
@@ -157,6 +146,8 @@ void EditorLayer::OnEvent()
     {
         STRAT_CLIENT_TRACE("The key J is pressed!");
     }
+
+
 }
 
 void EditorLayer::NewFrame()
@@ -201,11 +192,21 @@ void EditorLayer::MainWindow()
         if (ImGui::BeginMenu("File"))
         {
             if (ImGui::MenuItem("Open..", "Ctrl+O")) { /* Do stuff */ }
-            if (ImGui::MenuItem("Create Scene", "Ctrl+S")) { 
+            if (ImGui::MenuItem("Create Scene", "Ctrl+S"))
+            { 
                 m_Engine->GetSceneManager().CreateScene("Editor Scene"); 
             }
-            if (ImGui::MenuItem("SetScene", "Ctrl+5")) { 
-                m_Engine->GetSceneManager().SetCurrentScene("Editor Scene"); 
+            if (ImGui::MenuItem("Import Asset", "Ctrl+5")) 
+            {
+                auto selection = pfd::open_file("Select a file", ".",
+                                    { "All Files", "*" },
+                                    pfd::opt::none).result();
+
+                if(!selection.empty())
+                {   
+                    STRAT_CLIENT_INFO("{0}", selection[0].c_str());
+                    Editor::Importer::ImportObject(m_Engine->GetSceneManager().GetCurrentScene(), selection[0].c_str());
+                }
             }
             if (ImGui::MenuItem("Close", "Ctrl+W")) { m_EditorInfo.ToolActive = false; }
             ImGui::EndMenu();
@@ -242,56 +243,49 @@ void EditorLayer::Viewport()
 
 void EditorLayer::EntityProperties()
 {
-    float position[3] = {0.0f, 0.0f, 0.0f};
-    float scale[3] = {1.0f, 1.0f, 1.0f};
-    auto currentScene = m_Engine->GetSceneManager().GetCurrentScene();
+    auto* currentScene = m_Engine->GetSceneManager().GetCurrentScene();
+    auto it = currentScene->GetEntities().find(m_EditorInfo.SelectedEntity);
+    if(it == currentScene->GetEntities().end()) return;
 
-        // if(currentScene != nullptr)
-        // {
-        //     auto& models = currentScene->GetAllModels();
-        //     auto it = models.find(m_EditorInfo.SelectedEntity);
-        //     if(it != models.end())
-        //     {
-        //         auto& modelPos = it->second.GetTransformComponent().GetPosition();
-        //         auto& modelScale = it->second.GetTransformComponent().GetScale();
-        //         position[0] = modelPos.x;
-        //         position[1] = modelPos.y;
-        //         position[2] = modelPos.z;
-        //         scale[0] = modelScale.x;
-        //         scale[1] = modelScale.y;
-        //         scale[2] = modelScale.z;
-
-        //     }
-        // }
+    auto& transform = it->second.GetComponent<StratEngine::TransformComponent>();
 
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Properties", nullptr, flags);
 
-            // Wklęsły panel z ramką
+        // Wklęsły panel z ramką
         ImGui::BeginChild("PropertiesPanel", ImVec2(0, 105), true, 
                         ImGuiWindowFlags_AlwaysUseWindowPadding);
         
         // Tutaj umieszczasz zawartość (inputy, slidery, itp.)
+
         ImGui::Text("Transform");
         ImGui::Separator();
         
-        ImGui::DragFloat3("Position", position, 0.1f);
-        
-        float rotation[3] = {0.0f, 0.0f, 0.0f};
-        ImGui::DragFloat3("Rotation", rotation, 0.1f);
-        ImGui::DragFloat3("Scale", scale, 0.1f);
-
-        // if(it != models.end())
-        // {
-        //     it->second.GetTransformComponent().SetPosition(glm::vec3(position[0], position[1], position[2]));
-        //     it->second.GetTransformComponent().SetScale(scale[0], scale[1], scale[2]);
-        // }
+        ImGui::DragFloat3("Position", &transform.Position.x, 0.1f);
+        ImGui::DragFloat3("Rotation", &transform.Rotation.x, 0.1f);
+        ImGui::DragFloat3("Scale", &transform.Scale.x, 0.1f);
         
         ImGui::EndChild();
 
         ImGui::BeginChild("Texture", ImVec2(0, 100), true, ImGuiWindowFlags_AlwaysUseWindowPadding);
         ImGui::Text("Texture");
         ImGui::Separator();
+        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 10.0f);
+        if(ImGui::Button("Select file", ImVec2(75.0f, 50.0f)))
+        {
+
+            auto selection = pfd::open_file("Select a file", ".",
+                                { "Image Files", "*.png *.jpg *.jpeg *.bmp" },
+                                    pfd::opt::none).result();
+
+            if(!selection.empty())
+            {   
+                STRAT_CLIENT_INFO("{0}", selection[0].c_str());
+                auto& mesh = it->second.GetComponent<StratEngine::MeshComponent>();
+                mesh.AddTexture(selection[0].c_str());
+            }
+        }
+        ImGui::PopStyleVar(1);
         ImGui::EndChild();
 
     ImGui::End();
@@ -313,6 +307,7 @@ void EditorLayer::AssetManager()
 
 void EditorLayer::Objects()
 {
+    auto* currentScene = m_Engine->GetSceneManager().GetCurrentScene();
     static int selectedRow = -1;
     ImGuiWindowFlags flags = ImGuiWindowFlags_NoCollapse;
     ImGui::Begin("Objects", nullptr, flags);
@@ -321,20 +316,20 @@ void EditorLayer::Objects()
     {
         if(ImGui::BeginTable("MyTable", 1, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
         {
-            // int row = 0;
-            // for(auto& model : m_App->GetSceneManager()->GetCurrentScene()->GetAllModels())
-            // {
-            //     ImGui::TableNextRow();
-            //     ImGui::TableSetColumnIndex(0);
+            int row = 0;
+            for(auto& [name, entity] : currentScene->GetEntities())
+            {
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
                 
-            //     if(ImGui::Selectable(model.first.c_str(), selectedRow == row, 
-            //                         ImGuiSelectableFlags_SpanAllColumns))
-            //     {
-            //         selectedRow = row;
-            //         m_EditorInfo.SelectedEntity = model.first; // Zapisz nazwę wybranego modelu
-            //     }
-            //     row++;
-            // }
+                if(ImGui::Selectable(name.c_str(), selectedRow == row, 
+                                    ImGuiSelectableFlags_SpanAllColumns))
+                {
+                    selectedRow = row;
+                    m_EditorInfo.SelectedEntity = name; // Zapisz nazwę wybranego modelu
+                }
+                row++;
+            }
             ImGui::EndTable();
         }
     }
@@ -371,4 +366,27 @@ void EditorLayer::Objects()
     // ImGui::EndChild();
 
     ImGui::End();
+}
+
+void EditorLayer::CameraInput(float deltatime)
+{
+    if(m_Engine->IsMouseLocked())
+    {
+        if(StratEngine::Input::IsKeyPressed(STRAT_KEY_W))
+                m_EditorCamera.MoveCamera(StratEngine::CameraMovement::FORWARD, deltatime);
+        if(StratEngine::Input::IsKeyPressed(STRAT_KEY_S))
+                m_EditorCamera.MoveCamera(StratEngine::CameraMovement::BACKWARD, deltatime);
+        if(StratEngine::Input::IsKeyPressed(STRAT_KEY_A))
+                m_EditorCamera.MoveCamera(StratEngine::CameraMovement::LEFT, deltatime);
+        if(StratEngine::Input::IsKeyPressed(STRAT_KEY_D))
+                m_EditorCamera.MoveCamera(StratEngine::CameraMovement::RIGHT, deltatime);
+
+        auto mousePos = StratEngine::Input::GetMousePosition();
+        m_EditorCamera.ProcessMouseMovement(mousePos.first, mousePos.second);
+    }
+    else
+    {
+        m_EditorCamera.ResetFirstTime();
+    }
+
 }

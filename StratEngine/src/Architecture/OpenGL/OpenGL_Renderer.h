@@ -17,7 +17,9 @@ namespace StratEngine
             virtual void BeginScene(Camera& camera) override;
             virtual void EndScene() override;
             virtual void BindShader(std::shared_ptr<Shader> shader) override;
-            virtual void DrawMesh(MeshComponent& mesh) override;
+            virtual void DrawMesh(Entity& entity) override;
+            virtual void DrawDebug(DrawMode mode, Entity& entity) override;
+            inline virtual void Submit(Scene* scene) override { m_Scene = scene; };
             void InitFrameBuffer();
             inline virtual void* GetFrame() override { return (void*)(intptr_t)m_Texture; } ;
         private:

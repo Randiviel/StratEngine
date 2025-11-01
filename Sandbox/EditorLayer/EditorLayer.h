@@ -26,8 +26,10 @@ class EditorLayer : public StratEngine::Layer {
         void SetupDockspace();
         void AssetManager();
         void Objects();
+        void CameraInput(float deltatime);
 
     private:
+        StratEngine::Camera m_EditorCamera;
         StratEngine::Application* m_Engine;
         ImGuiID m_DockSpaceID;
         EditorLayerInfo m_EditorInfo;

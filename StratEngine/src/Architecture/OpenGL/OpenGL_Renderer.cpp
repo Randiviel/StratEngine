@@ -1,5 +1,6 @@
 #include "pchstrat.h"
 #include "StratConfig.h"
+#include "OpenGL_Renderer.h"
 
 namespace StratEngine 
 {
@@ -26,16 +27,21 @@ namespace StratEngine
     void OpenGL_Renderer::BeginScene(Camera& camera)
     {       
             glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);     
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
-            glEnable(GL_CULL_FACE);
 
-            glCullFace(GL_BACK);       // Ukryj tylne ściany
-            glFrontFace(GL_CCW);       // Przednie ściany = counter-clockwise
-
+            auto& entities = m_Scene->GetEntities();
+            auto it = entities.find("Light");
+            auto& transform = it->second.GetComponent<TransformComponent>();
+            auto& light = it->second.GetComponent<LightComponent>();
             glUseProgram(m_Shader->GetShader());
             m_Shader->CalculateMartix(camera);
+            m_Shader->setVec3("LightPos", transform.Position);
+            m_Shader->setVec3("LightColor", light.Color);
+            m_Shader->setVec3("ViewPos", camera.GetPosition());
+            m_Shader->setVec3("ObjectColor", glm::vec3(0.5f, 0.2f, 0.4f));
+            m_Shader->setBool("UseTexture", true);
     }
 
     void OpenGL_Renderer::EndScene()
@@ -51,14 +57,57 @@ namespace StratEngine
         m_Shader = shader;
     }
 
-    void OpenGL_Renderer::DrawMesh(MeshComponent& mesh)
+    void OpenGL_Renderer::DrawMesh(Entity& entity)
     {
+        auto& mesh = entity.GetComponent<MeshComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         mesh.VAO->Bind();
         glBindTexture(GL_TEXTURE_2D, mesh.Texture);
-        glm::mat4 matrixModel = glm::mat4(1.0f);
-        matrixModel = glm::scale(matrixModel, glm::vec3(0.01f, 0.01f, 0.01f));
-        m_Shader->setMat4("model", matrixModel);
+        m_Shader->setMat4("model", transform.GetModelMatrix());
         glDrawArrays(GL_TRIANGLES, 0, mesh.Vertices.size());
+    }
+
+    void OpenGL_Renderer::DrawDebug(DrawMode mode, Entity &entity)
+    {
+        auto& mesh = entity.GetComponent<MeshComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
+        mesh.VAO->Bind();
+        m_Shader->setMat4("model", transform.GetModelMatrix());
+
+        switch(mode)
+        {
+            case DrawMode::LINES:
+            {
+                glDrawArrays(GL_LINES, 0, mesh.Vertices.size());
+                break;
+            }
+            case DrawMode::POINTS:
+            {
+                glDrawArrays(GL_POINTS, 0, mesh.Vertices.size());
+                break;
+            }
+            case DrawMode::TRIANGLES:
+            {
+                glDrawArrays(GL_TRIANGLES, 0, mesh.Vertices.size());
+                break;
+            }
+            case DrawMode::POLYGONS:
+            {
+                glDrawArrays(GL_POLYGON, 0, mesh.Vertices.size());
+                break;
+            }
+            case DrawMode::QUADS:
+            {
+                glDrawArrays(GL_QUADS, 0, mesh.Vertices.size());
+                break;
+            }
+            case DrawMode::LINES_STRIP:
+            {
+                glDrawArrays(GL_LINE_STRIP, 0, mesh.Vertices.size());
+                break;
+            }
+        }
+
     }
 
     void OpenGL_Renderer::InitFrameBuffer()
